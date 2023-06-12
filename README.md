@@ -15,12 +15,18 @@ cargo build
 cargo test
 ```
 ## Usage: 
-To use this library, add the following to your Cargo.toml file:
+To use this library, add the numbers_rus crate to your project:
+```
+cargo add numbers_rus 
+```
 
+
+Add the following to your cargo.toml file:
 ```
 [dependencies]
-numbers = { git = "https://github.com/ooyeku/numbers.git" }
+numbers_rus = "0.1.0"
 ```
+
 
 ## Examples:
 The following examples show how to use this library:
