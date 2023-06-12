@@ -19,7 +19,7 @@ To use this library, add the following to your Cargo.toml file:
 
 ```
 [dependencies]
-numbers = { git = "https://git.jetbrains.space/dataalchemist/prod/numbers.git" }
+numbers = { git = "https://github.com/ooyeku/numbers.git" }
 ```
 
 ## Examples:
