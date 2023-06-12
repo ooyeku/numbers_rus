@@ -1,5 +1,5 @@
 [package]
-name = "numbers"
+name = "numbers_rus"
 version = "0.1.0"
 authors = ["Ola Yeku <yekuola@gmail.com>"]
 edition = "2021"
