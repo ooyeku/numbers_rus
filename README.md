@@ -4,13 +4,8 @@
 This library is used to perform various numerical operations in Rust.  
 The library is designed to be used in a variety of applications, including web services, command line utilities, and other Rust based applications.
 
-## How to build:
-This library is built using the standard Rust build tools.  To build the library, run the following command:
-
-```
-cargo build
-```
-
+## Testing:
+To test this library, run the following command:
 ```
 cargo test
 ```
@@ -24,7 +19,7 @@ cargo add numbers_rus
 Add the following to your cargo.toml file:
 ```
 [dependencies]
-numbers_rus = "0.1.2"
+numbers_rus = "0.1.3"
 ```
 
 
@@ -40,6 +35,32 @@ subtract(1, 2)
 multiply(1, 2)
 divide(1, 2)
 ```
+```
+// Floating point operations
+add_float(1.0, 2.0)
+subtract_float(1.0, 2.0)
+multiply_float(1.0, 2.0)
+````
+````
+// Conditional Checks
+is_even(2)
+is_odd(2)
+is_prime(2)
+````
+````
+// Vector operations
+vector_sum(vec![1, 2, 3])
+vector_mean(vec![1, 2, 3])
+vector_median(vec![1, 2, 3])
+````
+
+````
+// Equation operations
+let eq = Equation::new(2,4,'+');
+let mut result = eq.solve();
+eq.set_a(3);
+let result = eq.solve();
+````
 
 
 
