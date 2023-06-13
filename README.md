@@ -19,7 +19,7 @@ cargo add numbers_rus
 Add the following to your cargo.toml file:
 ```
 [dependencies]
-numbers_rus = "0.1.3"
+numbers_rus = "0.1.4"
 ```
 
 

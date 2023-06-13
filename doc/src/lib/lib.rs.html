@@ -2597,7 +2597,7 @@
     }
 }
 <span class="comment">// -------------------------------------------------------------------------------------------------
-</span><span class="doccomment">/// Returns the interquartile range of all elements in a vector
+</span><span class="doccomment">/// Returns the inter quartile range of all elements in a vector
 </span><span class="kw">pub fn </span>vector_interquartile_range(vector: Vec&lt;i128&gt;) -&gt; i128 {
     <span class="kw">let </span><span class="kw-2">mut </span>sorted = vector.clone();
     sorted.sort();
@@ -2605,7 +2605,7 @@
     <span class="kw">let </span>q3 = vector_median(sorted[sorted.len() / <span class="number">2</span>..sorted.len()].to_vec());
     q3 - q1
 }
-<span class="doccomment">/// Returns the interquartile range of all elements in a float vector
+<span class="doccomment">/// Returns the inter quartile range of all elements in a float vector
 </span><span class="kw">pub fn </span>vector_interquartile_range_float(vector: Vec&lt;f64&gt;) -&gt; f64 {
     <span class="kw">let </span><span class="kw-2">mut </span>sorted = vector.clone();
     sorted.sort_by(|a, b| a.partial_cmp(b).unwrap());
@@ -3481,8 +3481,8 @@
     }
 
     <span class="prelude-val">Ok</span>(DataFrame {
-        columns: columns,
-        data: data,
+        columns,
+        data,
     })
 }
 <span class="attr">#[cfg(test)]

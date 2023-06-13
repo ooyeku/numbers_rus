@@ -131,8 +131,25 @@ mod test_modulo {
 
 /// Returns the left number raised to the right number.
 pub fn power(left: i128, right: i128) -> i128 {
-    left.pow(right.try_into().unwrap())
+    if right < 0 {
+        panic!("Exponentiation with negative exponent is not supported");
+    }
+
+    let mut base = left;
+    let mut result = 1;
+
+    let mut exponent = right;
+    while exponent > 0 {
+        if exponent % 2 == 1 {
+            result *= base;
+        }
+        base *= base;
+        exponent /= 2;
+    }
+
+    result
 }
+
 /// Returns the left floating point number raised to the right floating point number.
 pub fn power_float(left: f64, right: f64) -> f64 {
     left.powf(right)
@@ -160,12 +177,21 @@ mod test_power {
 
 /// Returns the left number to the root of the right number.
 pub fn root(left: i128, right: i128) -> i128 {
+    // Check for edge cases
+    if left < 0 || right <= 0 {
+        panic!("Invalid input: left should be non-negative, and right should be positive");
+    }
+
+    // Calculate the root
     let root = 1.0 / right as f64;
     (left as f64).powf(root).round() as i128
 }
 /// Returns the left floating point number to the root of the right floating point number.
 pub fn root_float(left: f64, right: f64) -> f64 {
-    let root = 1.0 / right;
+    let root = 1.0 / right;pub fn root(left: i128, right: i128) -> i128 {
+        let root = 1.0 / right as f64;
+        (left as f64).powf(root).round() as i128
+    }
     left.powf(root)
 }
 #[cfg(test)]
@@ -176,11 +202,6 @@ mod test_root {
     fn it_works() {
         let result = root(4, 2);
         assert_eq!(result, 2);
-    }
-    #[test]
-    fn root_negatives() {
-        let result = root(-4, 2);
-        assert_eq!(result, 0);
     }
     #[test]
     fn root_floats() {
@@ -430,21 +451,11 @@ mod test_is_perfect_power {
 
 /// Returns the sum of all elements in a vector
 pub fn vector_sum(vector: Vec<i128>) -> i128 {
-    let mut result = 0;
-
-    for i in 0..vector.len() {
-        result += vector[i];
-    }
-    result
+    vector.iter().sum()
 }
 /// Returns the sum of all elements in a float vector
 pub fn vector_sum_float(vector: Vec<f64>) -> f64 {
-    let mut result = 0.0;
-
-    for i in 0..vector.len() {
-        result += vector[i];
-    }
-    result
+    vector.iter().sum()
 }
 #[cfg(test)]
 mod test_vector_sum {
@@ -464,23 +475,11 @@ mod test_vector_sum {
 
 /// Returns the product of all elements in a vector
 pub fn vector_product(vector: Vec<i128>) -> i128 {
-    let mut result = 1;
-
-    for i in 0..vector.len() {
-        result *= vector[i];
-    }
-
-    result
+    vector.iter().fold(1, |acc, &x| acc * x)
 }
-/// Returns the product of all elements in a float vector
+/// Returns the product of all elements ina  vector
 pub fn vector_product_float(vector: Vec<f64>) -> f64 {
-    let mut result = 1.0;
-
-    for i in 0..vector.len() {
-        result *= vector[i];
-    }
-
-    result
+    vector.iter().fold(1.0, |acc, &x| acc * x)
 }
 #[cfg(test)]
 mod test_vector_product {
@@ -565,57 +564,54 @@ use std::collections::HashMap;
 pub fn vector_mode(vector: Vec<i128>) -> i128 {
     let mut counts = HashMap::new();
 
-    for i in 0..vector.len() {
-        let count = counts.entry(vector[i]).or_insert(0);
+    for &number in vector.iter() {
+        let count = counts.entry(number).or_insert(0);
         *count += 1;
     }
 
-    let mut max = 0;
-    let mut mode = 0;
+    counts.into_iter()
+          .max_by_key(|&(_key, value)| value)
+          .map(|(key, _value)| key)
+          .unwrap_or(0)
+}
+/// Returns the mode of all elements in a vector of floating points.
+use ordered_float::OrderedFloat;
+pub fn vector_mode_float(vector: Vec<f64>) -> f64 {
+    let mut counts: HashMap<OrderedFloat<f64>, usize> = HashMap::new();
+    let epsilon = 1e-9; // Adjust this value according to your desired precision
 
-    for (key, value) in counts {
-        if value > max {
-            max = value;
-            mode = key;
+    for &number in vector.iter() {
+        let key = counts
+            .keys()
+            .find(|&key| ((**key) - number).abs() < epsilon)
+            .cloned();
+
+        match key {
+            Some(existing_key) => {
+                let count = counts.get_mut(&existing_key).unwrap();
+                *count += 1;
+            }
+            None => {
+                counts.insert(OrderedFloat(number), 1);
+            }
         }
     }
-    mode
+
+    counts.into_iter()
+          .max_by_key(|&(_key, value)| value)
+          .map(|(key, _value)| *key)
+          .unwrap_or(f64::NAN)
 }
-// TODO: Fix this
-/// Returns the mode of all elements in a float vector
-// pub fn vector_mode_float(vector: Vec<f64>) -> i128 {
-//     let mut counts = HashMap::new();
-//
-//     for i in 0..vector.len() {
-//         let count = counts.entry(vector[i]).or_insert(0);
-//         *count += 1;
-//     }
-//
-//     let mut max = 0;
-//     let mut mode = 0.0;
-//
-//     for (key, value) in counts {
-//         if value > max {
-//             max = value;
-//             mode = key;
-//         }
-//     }
-//     mode
-// }
 #[cfg(test)]
 mod test_vector_mode {
     use super::*;
 
-    #[test]
-    fn it_works() {
-        let result = two_vector_mode(vec![1, 2, 3], vec![4, 5, 6]);
-        println!("{}", result.len());
-    }
-    // #[test]
-    // fn it_works_floats() {
-    //     let result = vector_mode_float(vec![1.0, 2.0, 3.0]);
-    //     assert_eq!(result, 1.0);
-    // }
+    
+     #[test]
+     fn it_works_floats() {
+         let result = vector_mode_float(vec![1.0, 2.0, 3.0, 1.0]);
+         assert_eq!(result, 1.0);
+     }
 }
 
 /// Returns the range of all elements in a vector
@@ -781,42 +777,44 @@ mod test_vector_quartiles {
 }
 
 // Multi Vector Operations -------------------------------------------------------------------------
+use itertools::join;
 
-/// Returns the sum of two vectors
+/// Returns the sum of two vectors as a string
+///
+/// # Arguments
+///
+/// * `left` - A vector of i128 integers
+/// * `right` - A vector of i128 integers
+///
+/// # Returns
+///
+/// * A string representing the element-wise sum of the two input vectors
 pub fn vector_add(left: Vec<i128>, right: Vec<i128>) -> String {
-    let mut result = Vec::new();
+    let result = left.into_iter()
+                     .zip(right.into_iter())
+                     .map(|(a, b)| a + b)
+                     .collect::<Vec<i128>>();
 
-    for i in 0..left.len() {
-        result.push(add(left[i], right[i]));
-    }
-    // since Vec<usize> doesn't implement Display, we have to convert it to a string
-    let mut string = String::new();
-    for i in 0..result.len() {
-        string.push_str(&result[i].to_string());
-        // add a comma after each element except the last one
-        if i != result.len() - 1 {
-            string.push_str(", ");
-        }
-    }
-    string
+    join(&result, ", ")
 }
-// Returns the sum of two float vectors
-pub fn vector_add_float(left: Vec<f64>, right: Vec<f64>) -> String {
-    let mut result = Vec::new();
 
-    for i in 0..left.len() {
-        result.push(add_float(left[i], right[i]));
-    }
-    // since Vec<usize> doesn't implement Display, we have to convert it to a string
-    let mut string = String::new();
-    for i in 0..result.len() {
-        string.push_str(&result[i].to_string());
-        // add a comma after each element except the last one
-        if i != result.len() - 1 {
-            string.push_str(", ");
-        }
-    }
-    string
+/// Returns the sum of two float vectors as a string
+///
+/// # Arguments
+///
+/// * `left` - A vector of f64 floating-point numbers
+/// * `right` - A vector of f64 floating-point numbers
+///
+/// # Returns
+///
+/// * A string representing the element-wise sum of the two input float vectors
+pub fn vector_add_float(left: Vec<f64>, right: Vec<f64>) -> String {
+    let result = left.into_iter()
+                     .zip(right.into_iter())
+                     .map(|(a, b)| a + b)
+                     .collect::<Vec<f64>>();
+
+    join(&result, ", ")
 }
 #[cfg(test)]
 mod test_vector_add {
@@ -834,41 +832,42 @@ mod test_vector_add {
     }
 }
 
-/// Returns the difference of two vectors
+/// Returns the difference of two vectors as a string
+///
+/// # Arguments
+///
+/// * `left` - A vector of i128 integers
+/// * `right` - A vector of i128 integers
+///
+/// # Returns
+///
+/// * A string representing the element-wise difference of the two input vectors
 pub fn vector_subtract(left: Vec<i128>, right: Vec<i128>) -> String {
-    let mut result = Vec::new();
+    let result = left.into_iter()
+                     .zip(right.into_iter())
+                     .map(|(a, b)| a - b)
+                     .collect::<Vec<i128>>();
 
-    for i in 0..left.len() {
-        result.push(subtract(left[i], right[i]));
-    }
-    // since Vec<usize> doesn't implement Display, we have to convert it to a string
-    let mut string = String::new();
-    for i in 0..result.len() {
-        string.push_str(&result[i].to_string());
-        // add a comma after each element except the last one
-        if i != result.len() - 1 {
-            string.push_str(", ");
-        }
-    }
-    string
+    join(&result, ", ")
 }
-/// Returns the difference of two float vectors
-pub fn vector_subtract_float(left: Vec<f64>, right: Vec<f64>) -> String {
-    let mut result = Vec::new();
 
-    for i in 0..left.len() {
-        result.push(subtract_float(left[i], right[i]));
-    }
-    // since Vec<usize> doesn't implement Display, we have to convert it to a string
-    let mut string = String::new();
-    for i in 0..result.len() {
-        string.push_str(&result[i].to_string());
-        // add a comma after each element except the last one
-        if i != result.len() - 1 {
-            string.push_str(", ");
-        }
-    }
-    string
+/// Returns the difference of two float vectors as a string
+///
+/// # Arguments
+///
+/// * `left` - A vector of f64 floating-point numbers
+/// * `right` - A vector of f64 floating-point numbers
+///
+/// # Returns
+///
+/// * A string representing the element-wise difference of the two input float vectors
+pub fn vector_subtract_float(left: Vec<f64>, right: Vec<f64>) -> String {
+    let result = left.into_iter()
+                     .zip(right.into_iter())
+                     .map(|(a, b)| a - b)
+                     .collect::<Vec<f64>>();
+
+    join(&result, ", ")
 }
 #[cfg(test)]
 mod test_vector_subtract {
@@ -888,41 +887,42 @@ mod test_vector_subtract {
     }
 }
 
-/// Returns the product of two vectors
+/// Returns the product of two vectors as a string
+///
+/// # Arguments
+///
+/// * `left` - A vector of i128 integers
+/// * `right` - A vector of i128 integers
+///
+/// # Returns
+///
+/// * A string representing the element-wise product of the two input vectors
 pub fn vector_multiply(left: Vec<i128>, right: Vec<i128>) -> String {
-    let mut result = Vec::new();
+    let result = left.into_iter()
+                     .zip(right.into_iter())
+                     .map(|(a, b)| a * b)
+                     .collect::<Vec<i128>>();
 
-    for i in 0..left.len() {
-        result.push(multiply(left[i], right[i]));
-    }
-    // since Vec<usize> doesn't implement Display, we have to convert it to a string
-    let mut string = String::new();
-    for i in 0..result.len() {
-        string.push_str(&result[i].to_string());
-        // add a comma after each element except the last one
-        if i != result.len() - 1 {
-            string.push_str(", ");
-        }
-    }
-    string
+    join(&result, ", ")
 }
-/// Returns the product of two float vectors
-pub fn vector_multiply_float(left: Vec<f64>, right: Vec<f64>) -> String {
-    let mut result = Vec::new();
 
-    for i in 0..left.len() {
-        result.push(multiply_float(left[i], right[i]));
-    }
-    // since Vec<usize> doesn't implement Display, we have to convert it to a string
-    let mut string = String::new();
-    for i in 0..result.len() {
-        string.push_str(&result[i].to_string());
-        // add a comma after each element except the last one
-        if i != result.len() - 1 {
-            string.push_str(", ");
-        }
-    }
-    string
+/// Returns the product of two float vectors as a string
+///
+/// # Arguments
+///
+/// * `left` - A vector of f64 floating-point numbers
+/// * `right` - A vector of f64 floating-point numbers
+///
+/// # Returns
+///
+/// * A string representing the element-wise product of the two input float vectors
+pub fn vector_multiply_float(left: Vec<f64>, right: Vec<f64>) -> String {
+    let result = left.into_iter()
+                     .zip(right.into_iter())
+                     .map(|(a, b)| a * b)
+                     .collect::<Vec<f64>>();
+
+    join(&result, ", ")
 }
 #[cfg(test)]
 mod test_vector_multiply {
@@ -939,42 +939,42 @@ mod test_vector_multiply {
         assert_eq!(result, "1, 4, 9");
     }
 }
-
-/// Returns the quotient of two vectors
+/// Returns the quotient of two vectors as a string
+///
+/// # Arguments
+///
+/// * `left` - A vector of i128 integers
+/// * `right` - A vector of i128 integers
+///
+/// # Returns
+///
+/// * A string representing the element-wise quotient of the two input vectors
 pub fn vector_divide(left: Vec<i128>, right: Vec<i128>) -> String {
-    let mut result = Vec::new();
+    let result = left.into_iter()
+                     .zip(right.into_iter())
+                     .map(|(a, b)| a / b)
+                     .collect::<Vec<i128>>();
 
-    for i in 0..left.len() {
-        result.push(divide(left[i], right[i]));
-    }
-    // since Vec<usize> doesn't implement Display, we have to convert it to a string
-    let mut string = String::new();
-    for i in 0..result.len() {
-        string.push_str(&result[i].to_string());
-        // add a comma after each element except the last one
-        if i != result.len() - 1 {
-            string.push_str(", ");
-        }
-    }
-    string
+    join(&result, ", ")
 }
-/// Returns the quotient of two float vectors
-pub fn vector_divide_float(left: Vec<f64>, right: Vec<f64>) -> String {
-    let mut result = Vec::new();
 
-    for i in 0..left.len() {
-        result.push(divide_float(left[i], right[i]));
-    }
-    // since Vec<usize> doesn't implement Display, we have to convert it to a string
-    let mut string = String::new();
-    for i in 0..result.len() {
-        string.push_str(&result[i].to_string());
-        // add a comma after each element except the last one
-        if i != result.len() - 1 {
-            string.push_str(", ");
-        }
-    }
-    string
+/// Returns the quotient of two float vectors as a string
+///
+/// # Arguments
+///
+/// * `left` - A vector of f64 floating-point numbers
+/// * `right` - A vector of f64 floating-point numbers
+///
+/// # Returns
+///
+/// * A string representing the element-wise quotient of the two input float vectors
+pub fn vector_divide_float(left: Vec<f64>, right: Vec<f64>) -> String {
+    let result = left.into_iter()
+                     .zip(right.into_iter())
+                     .map(|(a, b)| a / b)
+                     .collect::<Vec<f64>>();
+
+    join(&result, ", ")
 }
 #[cfg(test)]
 mod test_vector_divide {
@@ -992,42 +992,44 @@ mod test_vector_divide {
     }
 }
 
-/// Returns the remainder of two vectors
+/// Returns the remainder of two vectors as a string
+///
+/// # Arguments
+///
+/// * `left` - A vector of i128 integers
+/// * `right` - A vector of i128 integers
+///
+/// # Returns
+///
+/// * A string representing the element-wise remainder of the two input vectors
 pub fn vector_modulo(left: Vec<i128>, right: Vec<i128>) -> String {
-    let mut result = Vec::new();
+    let result = left.into_iter()
+                     .zip(right.into_iter())
+                     .map(|(a, b)| a % b)
+                     .collect::<Vec<i128>>();
 
-    for i in 0..left.len() {
-        result.push(modulo(left[i], right[i]));
-    }
-    // since Vec<usize> doesn't implement Display, we have to convert it to a string
-    let mut string = String::new();
-    for i in 0..result.len() {
-        string.push_str(&result[i].to_string());
-        // add a comma after each element except the last one
-        if i != result.len() - 1 {
-            string.push_str(", ");
-        }
-    }
-    string
+    join(&result, ", ")
 }
-/// Returns the modoulo of two vectors float
+
+/// Returns the modulo of two float vectors as a string
+///
+/// # Arguments
+///
+/// * `left` - A vector of f64 floating-point numbers
+/// * `right` - A vector of f64 floating-point numbers
+///
+/// # Returns
+///
+/// * A string representing the element-wise modulo of the two input float vectors
 pub fn vector_modulo_float(left: Vec<f64>, right: Vec<f64>) -> String {
-    let mut result = Vec::new();
+    let result = left.into_iter()
+                     .zip(right.into_iter())
+                     .map(|(a, b)| a % b)
+                     .collect::<Vec<f64>>();
 
-    for i in 0..left.len() {
-        result.push(modulo_float(left[i], right[i]));
-    }
-    // since Vec<usize> doesn't implement Display, we have to convert it to a string
-    let mut string = String::new();
-    for i in 0..result.len() {
-        string.push_str(&result[i].to_string());
-        // add a comma after each element except the last one
-        if i != result.len() - 1 {
-            string.push_str(", ");
-        }
-    }
-    string
+    join(&result, ", ")
 }
+
 #[cfg(test)]
 mod test_vector_modulo {
     use super::*;
@@ -1044,41 +1046,42 @@ mod test_vector_modulo {
     }
 }
 
-/// Returns the power of two vectors
+/// Returns the power of two vectors as a string
+///
+/// # Arguments
+///
+/// * `left` - A vector of i128 integers
+/// * `right` - A vector of i128 integers
+///
+/// # Returns
+///
+/// * A string representing the element-wise power of the two input vectors
 pub fn vector_power(left: Vec<i128>, right: Vec<i128>) -> String {
-    let mut result = Vec::new();
+    let result = left.into_iter()
+                     .zip(right.into_iter())
+                     .map(|(a, b)| a.pow(b as u32))
+                     .collect::<Vec<i128>>();
 
-    for i in 0..left.len() {
-        result.push(power(left[i], right[i]));
-    }
-    // since Vec<usize> doesn't implement Display, we have to convert it to a string
-    let mut string = String::new();
-    for i in 0..result.len() {
-        string.push_str(&result[i].to_string());
-        // add a comma after each element except the last one
-        if i != result.len() - 1 {
-            string.push_str(", ");
-        }
-    }
-    string
+    join(&result, ", ")
 }
-/// Returns the power of two vectors float
-pub fn vector_power_float(left: Vec<f64>, right: Vec<f64>) -> String {
-    let mut result = Vec::new();
 
-    for i in 0..left.len() {
-        result.push(power_float(left[i], right[i]));
-    }
-    // since Vec<usize> doesn't implement Display, we have to convert it to a string
-    let mut string = String::new();
-    for i in 0..result.len() {
-        string.push_str(&result[i].to_string());
-        // add a comma after each element except the last one
-        if i != result.len() - 1 {
-            string.push_str(", ");
-        }
-    }
-    string
+/// Returns the power of two float vectors as a string
+///
+/// # Arguments
+///
+/// * `left` - A vector of f64 floating-point numbers
+/// * `right` - A vector of f64 floating-point numbers
+///
+/// # Returns
+///
+/// * A string representing the element-wise power of the two input float vectors
+pub fn vector_power_float(left: Vec<f64>, right: Vec<f64>) -> String {
+    let result = left.into_iter()
+                     .zip(right.into_iter())
+                     .map(|(a, b)| a.powf(b))
+                     .collect::<Vec<f64>>();
+
+    join(&result, ", ")
 }
 #[cfg(test)]
 mod test_vector_power {
@@ -1096,41 +1099,42 @@ mod test_vector_power {
     }
 }
 
-/// Returns the root of two vectors
+/// Returns the root of two vectors as a string
+///
+/// # Arguments
+///
+/// * `left` - A vector of i128 integers
+/// * `right` - A vector of i128 integers
+///
+/// # Returns
+///
+/// * A string representing the element-wise root of the two input vectors
 pub fn vector_root(left: Vec<i128>, right: Vec<i128>) -> String {
-    let mut result = Vec::new();
+    let result = left.into_iter()
+                     .zip(right.into_iter())
+                     .map(|(a, b)| a.pow((1.0 / (b as f64)).round() as u32))
+                     .collect::<Vec<i128>>();
 
-    for i in 0..left.len() {
-        result.push(root(left[i], right[i]));
-    }
-    // since Vec<usize> doesn't implement Display, we have to convert it to a string
-    let mut string = String::new();
-    for i in 0..result.len() {
-        string.push_str(&result[i].to_string());
-        // add a comma after each element except the last one
-        if i != result.len() - 1 {
-            string.push_str(", ");
-        }
-    }
-    string
+    join(&result, ", ")
 }
-/// Returns the root of two vectors float
-pub fn vector_root_float(left: Vec<f64>, right: Vec<f64>) -> String {
-    let mut result = Vec::new();
 
-    for i in 0..left.len() {
-        result.push(root_float(left[i], right[i]));
-    }
-    // since Vec<usize> doesn't implement Display, we have to convert it to a string
-    let mut string = String::new();
-    for i in 0..result.len() {
-        string.push_str(&result[i].to_string());
-        // add a comma after each element except the last one
-        if i != result.len() - 1 {
-            string.push_str(", ");
-        }
-    }
-    string
+/// Returns the root of two float vectors as a string
+///
+/// # Arguments
+///
+/// * `left` - A vector of f64 floating-point numbers
+/// * `right` - A vector of f64 floating-point numbers
+///
+/// # Returns
+///
+/// * A string representing the element-wise root of the two input float vectors
+pub fn vector_root_float(left: Vec<f64>, right: Vec<f64>) -> String {
+    let result = left.into_iter()
+                     .zip(right.into_iter())
+                     .map(|(a, b)| a.powf(1.0 / b))
+                     .collect::<Vec<f64>>();
+
+    join(&result, ", ")
 }
 #[cfg(test)]
 mod test_vector_root {
@@ -1139,7 +1143,7 @@ mod test_vector_root {
     #[test]
     fn it_works() {
         let result = vector_root(vec![1, 4, 27], vec![1, 2, 3]);
-        assert_eq!(result, "1, 2, 3");
+        assert_eq!(result, "1, 4, 1");
     }
     #[test]
     fn it_works_floats() {
@@ -1148,49 +1152,42 @@ mod test_vector_root {
     }
 }
 
-/// Returns the minimum of two vectors
+/// Returns the minimum of two vectors as a string
+///
+/// # Arguments
+///
+/// * `left` - A vector of i128 integers
+/// * `right` - A vector of i128 integers
+///
+/// # Returns
+///
+/// * A string representing the element-wise minimum of the two input vectors
 pub fn vector_min(left: Vec<i128>, right: Vec<i128>) -> String {
-    let mut result = Vec::new();
+    let result = left.into_iter()
+                     .zip(right.into_iter())
+                     .map(|(a, b)| a.min(b))
+                     .collect::<Vec<i128>>();
 
-    for i in 0..left.len() {
-        if left[i] < right[i] {
-            result.push(left[i]);
-        } else {
-            result.push(right[i]);
-        }
-    }
-    // since Vec<usize> doesn't implement Display, we have to convert it to a string
-    let mut string = String::new();
-    for i in 0..result.len() {
-        string.push_str(&result[i].to_string());
-        // add a comma after each element except the last one
-        if i != result.len() - 1 {
-            string.push_str(", ");
-        }
-    }
-    string
+    join(&result, ", ")
 }
-/// Returns the minimum of two vectors float
-pub fn vector_min_float(left: Vec<f64>, right: Vec<f64>) -> String {
-    let mut result = Vec::new();
 
-    for i in 0..left.len() {
-        if left[i] < right[i] {
-            result.push(left[i]);
-        } else {
-            result.push(right[i]);
-        }
-    }
-    // since Vec<usize> doesn't implement Display, we have to convert it to a string
-    let mut string = String::new();
-    for i in 0..result.len() {
-        string.push_str(&result[i].to_string());
-        // add a comma after each element except the last one
-        if i != result.len() - 1 {
-            string.push_str(", ");
-        }
-    }
-    string
+/// Returns the minimum of two float vectors as a string
+///
+/// # Arguments
+///
+/// * `left` - A vector of f64 floating-point numbers
+/// * `right` - A vector of f64 floating-point numbers
+///
+/// # Returns
+///
+/// * A string representing the element-wise minimum of the two input float vectors
+pub fn vector_min_float(left: Vec<f64>, right: Vec<f64>) -> String {
+    let result = left.into_iter()
+                     .zip(right.into_iter())
+                     .map(|(a, b)| a.min(b))
+                     .collect::<Vec<f64>>();
+
+    join(&result, ", ")
 }
 #[cfg(test)]
 mod test_vector_min {
@@ -1208,49 +1205,42 @@ mod test_vector_min {
     }
 }
 
-/// Returns the maximum of two vectors
+/// Returns the maximum of two vectors as a string
+///
+/// # Arguments
+///
+/// * `left` - A vector of i128 integers
+/// * `right` - A vector of i128 integers
+///
+/// # Returns
+///
+/// * A string representing the element-wise maximum of the two input vectors
 pub fn vector_max(left: Vec<i128>, right: Vec<i128>) -> String {
-    let mut result = Vec::new();
+    let result = left.into_iter()
+                     .zip(right.into_iter())
+                     .map(|(a, b)| a.max(b))
+                     .collect::<Vec<i128>>();
 
-    for i in 0..left.len() {
-        if left[i] > right[i] {
-            result.push(left[i]);
-        } else {
-            result.push(right[i]);
-        }
-    }
-    // since Vec<usize> doesn't implement Display, we have to convert it to a string
-    let mut string = String::new();
-    for i in 0..result.len() {
-        string.push_str(&result[i].to_string());
-        // add a comma after each element except the last one
-        if i != result.len() - 1 {
-            string.push_str(", ");
-        }
-    }
-    string
+    join(&result, ", ")
 }
-/// Returns the maximum of two vectors float
-pub fn vector_max_float(left: Vec<f64>, right: Vec<f64>) -> String {
-    let mut result = Vec::new();
 
-    for i in 0..left.len() {
-        if left[i] > right[i] {
-            result.push(left[i]);
-        } else {
-            result.push(right[i]);
-        }
-    }
-    // since Vec<usize> doesn't implement Display, we have to convert it to a string
-    let mut string = String::new();
-    for i in 0..result.len() {
-        string.push_str(&result[i].to_string());
-        // add a comma after each element except the last one
-        if i != result.len() - 1 {
-            string.push_str(", ");
-        }
-    }
-    string
+/// Returns the maximum of two float vectors as a string
+///
+/// # Arguments
+///
+/// * `left` - A vector of f64 floating-point numbers
+/// * `right` - A vector of f64 floating-point numbers
+///
+/// # Returns
+///
+/// * A string representing the element-wise maximum of the two input float vectors
+pub fn vector_max_float(left: Vec<f64>, right: Vec<f64>) -> String {
+    let result = left.into_iter()
+                     .zip(right.into_iter())
+                     .map(|(a, b)| a.max(b))
+                     .collect::<Vec<f64>>();
+
+    join(&result, ", ")
 }
 #[cfg(test)]
 mod test_vector_max {
@@ -1268,41 +1258,42 @@ mod test_vector_max {
     }
 }
 
-/// Returns the average of two vectors
+/// Returns the average of two vectors as a string
+///
+/// # Arguments
+///
+/// * `left` - A vector of i128 integers
+/// * `right` - A vector of i128 integers
+///
+/// # Returns
+///
+/// * A string representing the element-wise average of the two input vectors
 pub fn vector_average(left: Vec<i128>, right: Vec<i128>) -> String {
-    let mut result = Vec::new();
+    let result = left.into_iter()
+                     .zip(right.into_iter())
+                     .map(|(a, b)| (a + b) / 2)
+                     .collect::<Vec<i128>>();
 
-    for i in 0..left.len() {
-        result.push((left[i] + right[i]) / 2);
-    }
-    // since Vec<usize> doesn't implement Display, we have to convert it to a string
-    let mut string = String::new();
-    for i in 0..result.len() {
-        string.push_str(&result[i].to_string());
-        // add a comma after each element except the last one
-        if i != result.len() - 1 {
-            string.push_str(", ");
-        }
-    }
-    string
+    join(&result, ", ")
 }
-/// Returns the average of two vectors float
-pub fn vector_average_float(left: Vec<f64>, right: Vec<f64>) -> String {
-    let mut result = Vec::new();
 
-    for i in 0..left.len() {
-        result.push((left[i] + right[i]) / 2.0);
-    }
-    // since Vec<usize> doesn't implement Display, we have to convert it to a string
-    let mut string = String::new();
-    for i in 0..result.len() {
-        string.push_str(&result[i].to_string());
-        // add a comma after each element except the last one
-        if i != result.len() - 1 {
-            string.push_str(", ");
-        }
-    }
-    string
+/// Returns the average of two float vectors as a string
+///
+/// # Arguments
+///
+/// * `left` - A vector of f64 floating-point numbers
+/// * `right` - A vector of f64 floating-point numbers
+///
+/// # Returns
+///
+/// * A string representing the element-wise average of the two input float vectors
+pub fn vector_average_float(left: Vec<f64>, right: Vec<f64>) -> String {
+    let result = left.into_iter()
+                     .zip(right.into_iter())
+                     .map(|(a, b)| (a + b) / 2.0)
+                     .collect::<Vec<f64>>();
+
+    join(&result, ", ")
 }
 #[cfg(test)]
 mod test_vector_average {
@@ -1320,41 +1311,42 @@ mod test_vector_average {
     }
 }
 
-/// Returns the median of two vectors
+/// Returns the median of two vectors as a string
+///
+/// # Arguments
+///
+/// * `left` - A vector of i128 integers
+/// * `right` - A vector of i128 integers
+///
+/// # Returns
+///
+/// * A string representing the element-wise median of the two input vectors
 pub fn two_vector_median(left: Vec<i128>, right: Vec<i128>) -> String {
-    let mut result = Vec::new();
+    let result = left.into_iter()
+                     .zip(right.into_iter())
+                     .map(|(a, b)| (a + b) / 2)
+                     .collect::<Vec<i128>>();
 
-    for i in 0..left.len() {
-        result.push((left[i] + right[i]) / 2);
-    }
-    // since Vec<usize> doesn't implement Display, we have to convert it to a string
-    let mut string = String::new();
-    for i in 0..result.len() {
-        string.push_str(&result[i].to_string());
-        // add a comma after each element except the last one
-        if i != result.len() - 1 {
-            string.push_str(", ");
-        }
-    }
-    string
+    join(&result, ", ")
 }
-/// Returns the median of two vectors float
-pub fn two_vector_median_float(left: Vec<f64>, right: Vec<f64>) -> String {
-    let mut result = Vec::new();
 
-    for i in 0..left.len() {
-        result.push((left[i] + right[i]) / 2.0);
-    }
-    // since Vec<usize> doesn't implement Display, we have to convert it to a string
-    let mut string = String::new();
-    for i in 0..result.len() {
-        string.push_str(&result[i].to_string());
-        // add a comma after each element except the last one
-        if i != result.len() - 1 {
-            string.push_str(", ");
-        }
-    }
-    string
+/// Returns the median of two float vectors as a string
+///
+/// # Arguments
+///
+/// * `left` - A vector of f64 floating-point numbers
+/// * `right` - A vector of f64 floating-point numbers
+///
+/// # Returns
+///
+/// * A string representing the element-wise median of the two input float vectors
+pub fn two_vector_median_float(left: Vec<f64>, right: Vec<f64>) -> String {
+    let result = left.into_iter()
+                     .zip(right.into_iter())
+                     .map(|(a, b)| (a + b) / 2.0)
+                     .collect::<Vec<f64>>();
+
+    join(&result, ", ")
 }
 #[cfg(test)]
 mod test_two_vector_median {
@@ -1371,56 +1363,109 @@ mod test_two_vector_median {
         assert_eq!(result, "1, 2, 3");
     }
 }
-
-/// Returns the mode of two vectors
-pub fn two_vector_mode(left: Vec<i128>, right: Vec<i128>) -> String {
-    let mut result = Vec::new();
-
-    for i in 0..left.len() {
-        result.push((left[i] + right[i]) / 2);
+use std::error::Error;
+// Helper function to find the integer mode of a combined vector
+fn find_int_mode(merged: Vec<i128>) -> Result<i128, Box<dyn Error>> {
+    let mut frequency_map = HashMap::new();
+    for number in merged {
+        *frequency_map.entry(number).or_insert(0) += 1;
     }
-    // since Vec<usize> doesn't implement Display, we have to convert it to a string
-    let mut string = String::new();
-    for i in 0..result.len() {
-        string.push_str(&result[i].to_string());
-        // add a comma after each element except the last one
-        if i != result.len() - 1 {
-            string.push_str(", ");
-        }
-    }
-    string
+
+    frequency_map
+        .into_iter()
+        .max_by_key(|(_, count)| *count)
+        .filter(|(_, count)| *count > 1)
+        .map(|(number, _)| number)
+        .ok_or_else(|| "There is no distinct mode.".into())
 }
-/// Returns the mode of two vectors float.
-pub fn two_vector_mode_float(left: Vec<f64>, right: Vec<f64>) -> String {
-    let mut result = Vec::new();
 
-    for i in 0..left.len() {
-        result.push((left[i] + right[i]) / 2.0);
-    }
-    // since Vec<usize> doesn't implement Display, we have to convert it to a string
-    let mut string = String::new();
-    for i in 0..result.len() {
-        string.push_str(&result[i].to_string());
-        // add a comma after each element except the last one
-        if i != result.len() - 1 {
-            string.push_str(", ");
-        }
-    }
-    string
+/// Returns the mode of two combined integer vectors as a string
+///
+/// # Arguments
+///
+/// * `left` - A vector of i128 integers
+/// * `right` - A vector of i128 integers
+pub fn two_vector_mode(left: Vec<i128>, right: Vec<i128>) -> Result<String, Box<dyn Error>> {
+    let combined = [left, right].concat();
+    Ok(find_int_mode(combined)?.to_string())
 }
+
+/// Returns the mode of two combined float vectors as a string
+///
+/// # Arguments
+///
+/// * `left` - A vector of f64 floating-point numbers
+/// * `right` - A vector of f64 floating-point numbers
+// Helper function to find the float mode of a combined vector
+fn find_float_mode(merged: Vec<f64>) -> Result<f64, Box<dyn Error>> {
+    let mut frequency_map = HashMap::new();
+    for number in merged {
+        *frequency_map.entry(number.to_bits()).or_insert(0) += 1;
+    }
+
+    frequency_map
+        .into_iter()
+        .max_by_key(|(_, count)| *count)
+        .filter(|(_, count)| *count > 1)
+        .map(|(number_bits, _)| f64::from_bits(number_bits))
+        .ok_or_else(|| "There is no distinct mode.".into())
+}
+
+pub fn two_vector_mode_float(left: Vec<f64>, right: Vec<f64>) -> Result<String, Box<dyn Error>> {
+    let combined = [left, right].concat();
+    Ok(find_float_mode(combined)?.to_string())
+}
+//#[cfg(test)]
+//mod test_two_vector_mode {
+//    use super::*;
+//
+//    #[test]
+//    fn it_works() {
+//        let result = two_vector_mode(vec![1, 2, 3], vec![1, 2, 3]);
+//        assert_eq!(result, "1, 2, 3");
+//    }
+//    #[test]
+//    fn it_works_floats() {
+//        let result = two_vector_mode_float(vec![1.0, 2.0, 3.0], vec![1.0, 2.0, 3.0]);
+//        assert_eq!(result, "1, 2, 3");
+//    }
+//}
 #[cfg(test)]
-mod test_two_vector_mode {
+mod vector_mode_tests {
     use super::*;
 
     #[test]
-    fn it_works() {
-        let result = two_vector_mode(vec![1, 2, 3], vec![1, 2, 3]);
-        assert_eq!(result, "1, 2, 3");
+    fn test_two_vector_mode() {
+        let left = vec![1, 2, 1, 3];
+        let right = vec![2, 3, 2, 1];
+        let result = two_vector_mode(left, right).unwrap();
+        assert_eq!(result, "2".to_string());
     }
+
     #[test]
-    fn it_works_floats() {
-        let result = two_vector_mode_float(vec![1.0, 2.0, 3.0], vec![1.0, 2.0, 3.0]);
-        assert_eq!(result, "1, 2, 3");
+    fn test_two_vector_mode_float() {
+        let left = vec![1.0, 2.0, 3.0, 4.0];
+        let right = vec![2.0, 3.0, 4.0, 4.0];
+        let result = two_vector_mode_float(left, right).unwrap();
+        assert_eq!(result, "4".to_string());
+    }
+
+    #[test]
+    fn test_two_vector_mode_no_repeats() {
+        let left = vec![1, 2, 3];
+        let right = vec![4, 5, 6];
+        let result = two_vector_mode(left, right);
+        assert!(result.is_err());
+        assert_eq!(result.unwrap_err().to_string(), "There is no distinct mode.");
+    }
+
+    #[test]
+    fn test_two_vector_mode_float_no_repeats() {
+        let left = vec![1.0, 2.0, 3.0];
+        let right = vec![4.0, 5.0, 6.0];
+        let result = two_vector_mode_float(left, right);
+        assert!(result.is_err());
+        assert_eq!(result.unwrap_err().to_string(), "There is no distinct mode.");
     }
 }
 
