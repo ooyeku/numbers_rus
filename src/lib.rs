@@ -131,8 +131,25 @@ mod test_modulo {
 
 /// Returns the left number raised to the right number.
 pub fn power(left: i128, right: i128) -> i128 {
-    left.pow(right.try_into().unwrap())
+    if right < 0 {
+        panic!("Exponentiation with negative exponent is not supported");
+    }
+
+    let mut base = left;
+    let mut result = 1;
+
+    let mut exponent = right;
+    while exponent > 0 {
+        if exponent % 2 == 1 {
+            result *= base;
+        }
+        base *= base;
+        exponent /= 2;
+    }
+
+    result
 }
+
 /// Returns the left floating point number raised to the right floating point number.
 pub fn power_float(left: f64, right: f64) -> f64 {
     left.powf(right)
