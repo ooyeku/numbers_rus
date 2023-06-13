@@ -177,12 +177,21 @@ mod test_power {
 
 /// Returns the left number to the root of the right number.
 pub fn root(left: i128, right: i128) -> i128 {
+    // Check for edge cases
+    if left < 0 || right <= 0 {
+        panic!("Invalid input: left should be non-negative, and right should be positive");
+    }
+
+    // Calculate the root
     let root = 1.0 / right as f64;
     (left as f64).powf(root).round() as i128
 }
 /// Returns the left floating point number to the root of the right floating point number.
 pub fn root_float(left: f64, right: f64) -> f64 {
-    let root = 1.0 / right;
+    let root = 1.0 / right;pub fn root(left: i128, right: i128) -> i128 {
+        let root = 1.0 / right as f64;
+        (left as f64).powf(root).round() as i128
+    }
     left.powf(root)
 }
 #[cfg(test)]
@@ -193,11 +202,6 @@ mod test_root {
     fn it_works() {
         let result = root(4, 2);
         assert_eq!(result, 2);
-    }
-    #[test]
-    fn root_negatives() {
-        let result = root(-4, 2);
-        assert_eq!(result, 0);
     }
     #[test]
     fn root_floats() {
