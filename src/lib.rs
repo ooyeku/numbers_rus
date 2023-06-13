@@ -1587,14 +1587,17 @@ impl Equation {
     /// sets the a value
     pub fn set_a(&mut self, a: i128) {
         self.a = a;
+        self.sol = 0; // reset the solution
     }
     /// sets the b value
     pub fn set_b(&mut self, b: i128) {
         self.b = b;
+        self.sol = 0; // reset the solution
     }
     /// sets the operator
     pub fn set_operator(&mut self, operator: char) {
         self.operator = operator;
+        self.sol = 0; // reset the solution
     }
     /// returns the a value
     pub fn get_a(&self) -> i128 {
@@ -1623,21 +1626,155 @@ mod test_equation {
         let mut equation = Equation::new(1, 2, '+');
         equation.set_a(3);
         assert_eq!(equation.get_a(), 3);
+        assert_eq!(equation.get_sol(), 5);
     }
     #[test]
     fn set_b() {
         let mut equation = Equation::new(1, 2, '+');
         equation.set_b(3);
         assert_eq!(equation.get_b(), 3);
+        assert_eq!(equation.get_sol(), 4);
     }
     #[test]
     fn set_operator() {
         let mut equation = Equation::new(1, 2, '+');
         equation.set_operator('-');
         assert_eq!(equation.get_operator(), '-');
+        assert_eq!(equation.get_sol(), -1);
+    }
+    #[test]
+    fn change_equation(){
+        let mut equation = Equation::new(1, 2, '+');
+        assert_eq!(equation.get_sol(), 3);
+        equation.set_a(3);
+        println!("a: {}", equation.get_a());
+        println!("b: {}", equation.get_b());
+        println!("sol: {}", equation.get_sol());
+        assert_eq!(equation.get_sol(), 5);
+        equation.set_b(3);
+        println!("a: {}", equation.get_a());
+        println!("b: {}", equation.get_b());
+        assert_eq!(equation.get_sol(), 6);
     }
 }
 
+/// EquationF is an equation similar to Equation, but with f64 values.
+pub struct EquationF {
+    a: f64,
+    b: f64,
+    operator: char,
+    sol: f64,
+}
+impl EquationF {
+    pub fn new(a: f64, b: f64, operator: char) -> EquationF {
+        EquationF {
+            a,
+            b,
+            operator,
+            sol: 0.0,
+        }
+    }
+    pub fn get_sol(&mut self) -> f64 {
+        if self.sol == 0.0 {
+            self.sol = match self.operator {
+                '+' => add_float(self.a, self.b),
+                '-' => subtract_float(self.a, self.b),
+                '*' => multiply_float(self.a, self.b),
+                '/' => divide_float(self.a, self.b),
+                '%' => modulo_float(self.a, self.b),
+                '^' => power_float(self.a, self.b),
+                _ => 0.0,
+            };
+        }
+        self.sol
+    }
+    pub fn set_a(&mut self, a: f64) {
+        self.a = a;
+        self.sol = 0.0; // reset the solution
+    }
+    pub fn set_b(&mut self, b: f64) {
+        self.b = b;
+        self.sol = 0.0; // reset the solution
+    }
+    pub fn set_operator(&mut self, operator: char) {
+        self.operator = operator;
+        self.sol = 0.0; // reset the solution
+    }
+    pub fn get_a(&self) -> f64 {
+        self.a
+    }
+    pub fn get_b(&self) -> f64 {
+        self.b
+    }
+    pub fn get_operator(&self) -> char {
+        self.operator
+    }
+}
+#[cfg(test)]
+mod test_equation_f {
+    use super::*;
+
+    #[test]
+    fn it_works() {
+        let mut equation = EquationF::new(1.0, 2.4, '+');
+        assert_eq!(equation.get_sol(), 3.4);
+    }
+    #[test]
+    fn set_a() {
+        let mut equation = EquationF::new(1.0, 2.0, '+');
+        equation.set_a(3.5);
+        assert_eq!(equation.get_a(), 3.5);
+        assert_eq!(equation.get_sol(), 5.5);
+    }
+    #[test]
+    fn set_b() {
+        let mut equation = EquationF::new(1.0, 2.0, '+');
+        equation.set_b(3.883);
+        assert_eq!(equation.get_b(), 3.883);
+        assert_eq!(equation.get_sol(), 4.883);
+    }
+    #[test]
+    fn set_operator() {
+        let mut equation = EquationF::new(1.0, 2.0, '+');
+        equation.set_operator('-');
+        assert_eq!(equation.get_operator(), '-');
+        assert_eq!(equation.get_sol(), -1.0);
+        equation.set_operator('*');
+        assert_eq!(equation.get_operator(), '*');
+        assert_eq!(equation.get_sol(), 2.0);
+        equation.set_operator('/');
+        assert_eq!(equation.get_operator(), '/');
+        assert_eq!(equation.get_sol(), 0.5);
+        equation.set_operator('%');
+        assert_eq!(equation.get_operator(), '%');
+        assert_eq!(equation.get_sol(), 1.0);
+        equation.set_operator('^');
+        assert_eq!(equation.get_operator(), '^');
+        assert_eq!(equation.get_sol(), 1.0);
+    }
+    #[test]
+    fn change_equation(){
+        let mut equation = EquationF::new(1.0, 2.0, '+');
+        assert_eq!(equation.get_sol(), 3.0);
+        equation.set_a(3.7);
+        println!("a: {}", equation.get_a());
+        println!("b: {}", equation.get_b());
+        println!("sol: {}", equation.get_sol());
+        assert_eq!(equation.get_sol(), 5.7);
+        equation.set_b(3.2);
+        println!("a: {}", equation.get_a());
+        println!("b: {}", equation.get_b());
+        assert_eq!(equation.get_sol(), 6.9);
+        equation.set_a(14.042134);
+        println!("a: {}", equation.get_a());
+        println!("b: {}", equation.get_b());
+        assert_eq!(equation.get_sol(), 17.242134);
+        equation.set_operator('-');
+        println!("a: {}", equation.get_a());
+        println!("b: {}", equation.get_b());
+        assert_eq!(equation.get_sol(), 10.842134000000001);
+    }
+}
 
 /// ZeroEquation is an equation with a list of values on one side and a solution on the other.
 /// Similar to Equation, but with a list of values (in a Vec) that will add up to the solution

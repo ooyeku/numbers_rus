@@ -7,7 +7,7 @@ description = "A library for working with numbers. Supports operations on intege
 license = "MIT OR Apache-2.0"
 
 [lib]
-name = "numbers"
+name = "numbers_rus"
 path = "src/lib.rs"
 
 [dependencies]

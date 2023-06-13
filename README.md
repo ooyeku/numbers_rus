@@ -1,7 +1,7 @@
 # Numbers Library
 **authors: "Ola Yeku"**
 ## Purpose:
-This library is used to perform various numberical operations in Rust.  
+This library is used to perform various numerical operations in Rust.  
 The library is designed to be used in a variety of applications, including web services, command line utilities, and other Rust based applications.
 
 ## How to build:
