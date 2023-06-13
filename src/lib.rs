@@ -646,7 +646,7 @@ mod test_vector_range {
     }
 }
 // -------------------------------------------------------------------------------------------------
-/// Returns the interquartile range of all elements in a vector
+/// Returns the inter quartile range of all elements in a vector
 pub fn vector_interquartile_range(vector: Vec<i128>) -> i128 {
     let mut sorted = vector.clone();
     sorted.sort();
@@ -654,7 +654,7 @@ pub fn vector_interquartile_range(vector: Vec<i128>) -> i128 {
     let q3 = vector_median(sorted[sorted.len() / 2..sorted.len()].to_vec());
     q3 - q1
 }
-/// Returns the interquartile range of all elements in a float vector
+/// Returns the inter quartile range of all elements in a float vector
 pub fn vector_interquartile_range_float(vector: Vec<f64>) -> f64 {
     let mut sorted = vector.clone();
     sorted.sort_by(|a, b| a.partial_cmp(b).unwrap());
@@ -1390,7 +1390,7 @@ pub fn two_vector_mode(left: Vec<i128>, right: Vec<i128>) -> String {
     }
     string
 }
-/// Returns the mode of two vectors float
+/// Returns the mode of two vectors float.
 pub fn two_vector_mode_float(left: Vec<f64>, right: Vec<f64>) -> String {
     let mut result = Vec::new();
 
@@ -1426,7 +1426,21 @@ mod test_two_vector_mode {
 
 // Dataframe functions  ----------------------------------------------------------------------------
 
-/// A dataframe struct similar to pythons pandas dataframe
+/// A dataframe struct similar to pythons pandas dataframe but with less functionality and only for integers
+/// The dataframe is stored as a vector of vectors
+/// The first vector contains the column names
+/// The rest of the vectors contain the data
+/// The data is stored as a vector of vectors
+///
+/// # Example
+/// ```
+/// use numbers_rus::DataFrame;
+/// let mut df = DataFrame::new();
+/// df.add_column("a", &vec![1, 2, 3]);
+/// df.add_column("b", &vec![4, 5, 6]);
+/// df.add_column("c", &vec![7, 8, 9]);
+/// ```
+///
 pub struct DataFrame {
     columns: Vec<String>,
     data: Vec<Vec<i128>>,
@@ -1516,8 +1530,8 @@ pub fn dataframe_create(
     }
 
     Ok(DataFrame {
-        columns: columns,
-        data: data,
+        columns,
+        data,
     })
 }
 #[cfg(test)]
@@ -1547,11 +1561,14 @@ mod test_dataframe_create {
     }
 }
 
-/// Equation with an a, b, and operator.
+/// Equation struct that can be used to solve equations with two numbers and an operator (+, -, *, /, %, ^)
 /// Sol is the solution to the equation and is calculated when get_sol() is called.
 ///
 /// # Example
 /// ```
+/// use numbers_rus::Equation;
+/// let mut equation = Equation::new(1, 2, '+');
+/// assert_eq!(equation.get_sol(), 3);
 /// ```
 pub struct Equation {
     a: i128,
@@ -1584,17 +1601,17 @@ impl Equation {
         }
         self.sol
     }
-    /// sets the a value
+    /// sets the a value (first number) in the equation struct.  This will reset the solution to 0 so that it will be recalculated when get_sol() is called.
     pub fn set_a(&mut self, a: i128) {
         self.a = a;
         self.sol = 0; // reset the solution
     }
-    /// sets the b value
+    /// sets the b value (second number) in the equation struct.  This will reset the solution to 0 so that it will be recalculated when get_sol() is called.
     pub fn set_b(&mut self, b: i128) {
         self.b = b;
         self.sol = 0; // reset the solution
     }
-    /// sets the operator
+    /// sets the operator in the equation struct.  This will reset the solution to 0 so that it will be recalculated when get_sol() is called.
     pub fn set_operator(&mut self, operator: char) {
         self.operator = operator;
         self.sol = 0; // reset the solution
@@ -1658,7 +1675,14 @@ mod test_equation {
     }
 }
 
-/// EquationF is an equation similar to Equation, but with f64 values.
+/// EquationF is an equation similar to Equation, but with f64 values.  Sol is calculated when get_sol() is called.
+/// # Example
+/// ```
+/// use numbers_rus::EquationF;
+/// let mut equation = EquationF::new(1.092, 2.435, '+');
+/// assert_eq!(equation.get_sol(), 3.527);
+/// ```
+
 pub struct EquationF {
     a: f64,
     b: f64,
@@ -1688,14 +1712,17 @@ impl EquationF {
         }
         self.sol
     }
+    /// sets the a value (first number) in the equation struct.  This will reset the solution to 0 so that it will be recalculated when get_sol() is called.
     pub fn set_a(&mut self, a: f64) {
         self.a = a;
         self.sol = 0.0; // reset the solution
     }
+    /// sets the b value (second number) in the equation struct.  This will reset the solution to 0 so that it will be recalculated when get_sol() is called.
     pub fn set_b(&mut self, b: f64) {
         self.b = b;
         self.sol = 0.0; // reset the solution
     }
+    /// sets the operator in the equation struct.  This will reset the solution to 0 so that it will be recalculated when get_sol() is called.
     pub fn set_operator(&mut self, operator: char) {
         self.operator = operator;
         self.sol = 0.0; // reset the solution
@@ -1783,6 +1810,9 @@ mod test_equation_f {
 ///
 /// # Example
 /// ```
+/// use numbers_rus::ZeroEquation;
+/// let mut equation = ZeroEquation::new(vec![1, 2, 3]);
+/// assert_eq!(equation.get_sol(), 0);
 /// ```
 pub struct ZeroEquation {
     values: Vec<i128>,  // accepts lists of positive or negative numbers
@@ -1793,31 +1823,32 @@ pub struct ZeroEquation {
 impl ZeroEquation {
     pub fn new(values: Vec<i128>) -> ZeroEquation {
         ZeroEquation {
-            values: values,
+            values,
             sol: 0,
             is_valid: false,
         }
     }
-    // returns all values
+    /// returns all the values in the equation
     pub fn get_values(&self) -> Vec<i128> {
         self.values.clone()
     }
+    /// returns the value at the given index
     pub fn get_value(&self, index: usize) -> i128 {
         self.values[index]
     }
-    // add a value to the list
+    /// adds a single value to the list of values
     pub fn add_value(&mut self, value: i128) {
         self.values.push(value);
         // chcek equation after altering to see if it is valid
         self.check_sol();
     }
-    // remove a value from the list
+    /// removes a single value from the list of values
     pub fn remove_value(&mut self, index: usize) {
         self.values.remove(index);
         // chcek equation after altering to see if it is valid
         self.check_sol();
     }
-    // returns the solution
+    /// returns the solution
     pub fn get_sol(&self) -> i128 {
         self.sol
     }
@@ -1827,7 +1858,7 @@ impl ZeroEquation {
         self.values.remove(index);
         self.sol
     }
-    // checks if the values add up to the solution
+    /// checks if the values add up to the solution
     fn check_sol(&mut self) {
         let mut sum = 0;
         for value in &self.values {
@@ -1837,12 +1868,12 @@ impl ZeroEquation {
             self.is_valid = true;
         }
     }
-    // returns true if the values add up to the solution
+    /// returns true if the values add up to the solution
     pub fn is_valid(&mut self) -> bool {
         self.check_sol();
         self.is_valid
     }
-    // returns the difference between the solution and the sum of the values if the values do not add up to the solution
+    /// returns the difference between the solution and the sum of the values if the values do not add up to the solution
     pub fn get_error(&mut self) -> i128 {
         self.check_sol();
         if self.is_valid {

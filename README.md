@@ -33,7 +33,7 @@ The following examples show how to use this library:
 
 ``` 
 // Import the library
-use numbers;
+use numbers_rus::numbers_rus::*
 // Basic operations
 add(1, 2)
 subtract(1, 2)
