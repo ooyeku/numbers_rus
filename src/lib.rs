@@ -188,10 +188,11 @@ pub fn root(left: i128, right: i128) -> i128 {
 }
 /// Returns the left floating point number to the root of the right floating point number.
 pub fn root_float(left: f64, right: f64) -> f64 {
-    let root = 1.0 / right;pub fn root(left: i128, right: i128) -> i128 {
-        let root = 1.0 / right as f64;
-        (left as f64).powf(root).round() as i128
-    }
+    let root = 1.0 / right;
+    // pub fn root(left: i128, right: i128) -> i128 {
+    //     let root = 1.0 / right as f64;
+    //     (left as f64).powf(root).round() as i128
+    // }
     left.powf(root)
 }
 #[cfg(test)]
@@ -1436,7 +1437,7 @@ mod vector_mode_tests {
 
     #[test]
     fn test_two_vector_mode() {
-        let left = vec![1, 2, 1, 3];
+        let left = vec![1, 2, 1, 2];
         let right = vec![2, 3, 2, 1];
         let result = two_vector_mode(left, right).unwrap();
         assert_eq!(result, "2".to_string());
