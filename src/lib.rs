@@ -451,21 +451,11 @@ mod test_is_perfect_power {
 
 /// Returns the sum of all elements in a vector
 pub fn vector_sum(vector: Vec<i128>) -> i128 {
-    let mut result = 0;
-
-    for i in 0..vector.len() {
-        result += vector[i];
-    }
-    result
+    vector.iter().sum()
 }
 /// Returns the sum of all elements in a float vector
 pub fn vector_sum_float(vector: Vec<f64>) -> f64 {
-    let mut result = 0.0;
-
-    for i in 0..vector.len() {
-        result += vector[i];
-    }
-    result
+    vector.iter().sum()
 }
 #[cfg(test)]
 mod test_vector_sum {
@@ -485,23 +475,11 @@ mod test_vector_sum {
 
 /// Returns the product of all elements in a vector
 pub fn vector_product(vector: Vec<i128>) -> i128 {
-    let mut result = 1;
-
-    for i in 0..vector.len() {
-        result *= vector[i];
-    }
-
-    result
+    vector.iter().fold(1, |acc, &x| acc * x)
 }
-/// Returns the product of all elements in a float vector
+/// Returns the product of all elements ina  vector
 pub fn vector_product_float(vector: Vec<f64>) -> f64 {
-    let mut result = 1.0;
-
-    for i in 0..vector.len() {
-        result *= vector[i];
-    }
-
-    result
+    vector.iter().fold(1.0, |acc, &x| acc * x)
 }
 #[cfg(test)]
 mod test_vector_product {
@@ -586,43 +564,44 @@ use std::collections::HashMap;
 pub fn vector_mode(vector: Vec<i128>) -> i128 {
     let mut counts = HashMap::new();
 
-    for i in 0..vector.len() {
-        let count = counts.entry(vector[i]).or_insert(0);
+    for &number in vector.iter() {
+        let count = counts.entry(number).or_insert(0);
         *count += 1;
     }
 
-    let mut max = 0;
-    let mut mode = 0;
+    counts.into_iter()
+          .max_by_key(|&(_key, value)| value)
+          .map(|(key, _value)| key)
+          .unwrap_or(0)
+}
+/// Returns the mode of all elements in a vector of floating points.
+use ordered_float::OrderedFloat;
+pub fn vector_mode_float(vector: Vec<f64>) -> f64 {
+    let mut counts: HashMap<OrderedFloat<f64>, usize> = HashMap::new();
+    let epsilon = 1e-9; // Adjust this value according to your desired precision
 
-    for (key, value) in counts {
-        if value > max {
-            max = value;
-            mode = key;
+    for &number in vector.iter() {
+        let key = counts
+            .keys()
+            .find(|&key| ((**key) - number).abs() < epsilon)
+            .cloned();
+
+        match key {
+            Some(existing_key) => {
+                let count = counts.get_mut(&existing_key).unwrap();
+                *count += 1;
+            }
+            None => {
+                counts.insert(OrderedFloat(number), 1);
+            }
         }
     }
-    mode
+
+    counts.into_iter()
+          .max_by_key(|&(_key, value)| value)
+          .map(|(key, _value)| *key)
+          .unwrap_or(f64::NAN)
 }
-// TODO: Fix this
-/// Returns the mode of all elements in a float vector
-// pub fn vector_mode_float(vector: Vec<f64>) -> i128 {
-//     let mut counts = HashMap::new();
-//
-//     for i in 0..vector.len() {
-//         let count = counts.entry(vector[i]).or_insert(0);
-//         *count += 1;
-//     }
-//
-//     let mut max = 0;
-//     let mut mode = 0.0;
-//
-//     for (key, value) in counts {
-//         if value > max {
-//             max = value;
-//             mode = key;
-//         }
-//     }
-//     mode
-// }
 #[cfg(test)]
 mod test_vector_mode {
     use super::*;
@@ -632,11 +611,11 @@ mod test_vector_mode {
         let result = two_vector_mode(vec![1, 2, 3], vec![4, 5, 6]);
         println!("{}", result.len());
     }
-    // #[test]
-    // fn it_works_floats() {
-    //     let result = vector_mode_float(vec![1.0, 2.0, 3.0]);
-    //     assert_eq!(result, 1.0);
-    // }
+     #[test]
+     fn it_works_floats() {
+         let result = vector_mode_float(vec![1.0, 2.0, 3.0, 1.0]);
+         assert_eq!(result, 1.0);
+     }
 }
 
 /// Returns the range of all elements in a vector
