@@ -606,11 +606,7 @@ pub fn vector_mode_float(vector: Vec<f64>) -> f64 {
 mod test_vector_mode {
     use super::*;
 
-    #[test]
-    fn it_works() {
-        let result = two_vector_mode(vec![1, 2, 3], vec![4, 5, 6]);
-        println!("{}", result.len());
-    }
+    
      #[test]
      fn it_works_floats() {
          let result = vector_mode_float(vec![1.0, 2.0, 3.0, 1.0]);
@@ -1367,56 +1363,109 @@ mod test_two_vector_median {
         assert_eq!(result, "1, 2, 3");
     }
 }
-
-/// Returns the mode of two vectors
-pub fn two_vector_mode(left: Vec<i128>, right: Vec<i128>) -> String {
-    let mut result = Vec::new();
-
-    for i in 0..left.len() {
-        result.push((left[i] + right[i]) / 2);
+use std::error::Error;
+// Helper function to find the integer mode of a combined vector
+fn find_int_mode(merged: Vec<i128>) -> Result<i128, Box<dyn Error>> {
+    let mut frequency_map = HashMap::new();
+    for number in merged {
+        *frequency_map.entry(number).or_insert(0) += 1;
     }
-    // since Vec<usize> doesn't implement Display, we have to convert it to a string
-    let mut string = String::new();
-    for i in 0..result.len() {
-        string.push_str(&result[i].to_string());
-        // add a comma after each element except the last one
-        if i != result.len() - 1 {
-            string.push_str(", ");
-        }
-    }
-    string
+
+    frequency_map
+        .into_iter()
+        .max_by_key(|(_, count)| *count)
+        .filter(|(_, count)| *count > 1)
+        .map(|(number, _)| number)
+        .ok_or_else(|| "There is no distinct mode.".into())
 }
-/// Returns the mode of two vectors float.
-pub fn two_vector_mode_float(left: Vec<f64>, right: Vec<f64>) -> String {
-    let mut result = Vec::new();
 
-    for i in 0..left.len() {
-        result.push((left[i] + right[i]) / 2.0);
-    }
-    // since Vec<usize> doesn't implement Display, we have to convert it to a string
-    let mut string = String::new();
-    for i in 0..result.len() {
-        string.push_str(&result[i].to_string());
-        // add a comma after each element except the last one
-        if i != result.len() - 1 {
-            string.push_str(", ");
-        }
-    }
-    string
+/// Returns the mode of two combined integer vectors as a string
+///
+/// # Arguments
+///
+/// * `left` - A vector of i128 integers
+/// * `right` - A vector of i128 integers
+pub fn two_vector_mode(left: Vec<i128>, right: Vec<i128>) -> Result<String, Box<dyn Error>> {
+    let combined = [left, right].concat();
+    Ok(find_int_mode(combined)?.to_string())
 }
+
+/// Returns the mode of two combined float vectors as a string
+///
+/// # Arguments
+///
+/// * `left` - A vector of f64 floating-point numbers
+/// * `right` - A vector of f64 floating-point numbers
+// Helper function to find the float mode of a combined vector
+fn find_float_mode(merged: Vec<f64>) -> Result<f64, Box<dyn Error>> {
+    let mut frequency_map = HashMap::new();
+    for number in merged {
+        *frequency_map.entry(number.to_bits()).or_insert(0) += 1;
+    }
+
+    frequency_map
+        .into_iter()
+        .max_by_key(|(_, count)| *count)
+        .filter(|(_, count)| *count > 1)
+        .map(|(number_bits, _)| f64::from_bits(number_bits))
+        .ok_or_else(|| "There is no distinct mode.".into())
+}
+
+pub fn two_vector_mode_float(left: Vec<f64>, right: Vec<f64>) -> Result<String, Box<dyn Error>> {
+    let combined = [left, right].concat();
+    Ok(find_float_mode(combined)?.to_string())
+}
+//#[cfg(test)]
+//mod test_two_vector_mode {
+//    use super::*;
+//
+//    #[test]
+//    fn it_works() {
+//        let result = two_vector_mode(vec![1, 2, 3], vec![1, 2, 3]);
+//        assert_eq!(result, "1, 2, 3");
+//    }
+//    #[test]
+//    fn it_works_floats() {
+//        let result = two_vector_mode_float(vec![1.0, 2.0, 3.0], vec![1.0, 2.0, 3.0]);
+//        assert_eq!(result, "1, 2, 3");
+//    }
+//}
 #[cfg(test)]
-mod test_two_vector_mode {
+mod vector_mode_tests {
     use super::*;
 
     #[test]
-    fn it_works() {
-        let result = two_vector_mode(vec![1, 2, 3], vec![1, 2, 3]);
-        assert_eq!(result, "1, 2, 3");
+    fn test_two_vector_mode() {
+        let left = vec![1, 2, 1, 3];
+        let right = vec![2, 3, 2, 1];
+        let result = two_vector_mode(left, right).unwrap();
+        assert_eq!(result, "2".to_string());
     }
+
     #[test]
-    fn it_works_floats() {
-        let result = two_vector_mode_float(vec![1.0, 2.0, 3.0], vec![1.0, 2.0, 3.0]);
-        assert_eq!(result, "1, 2, 3");
+    fn test_two_vector_mode_float() {
+        let left = vec![1.0, 2.0, 3.0, 4.0];
+        let right = vec![2.0, 3.0, 4.0, 4.0];
+        let result = two_vector_mode_float(left, right).unwrap();
+        assert_eq!(result, "4".to_string());
+    }
+
+    #[test]
+    fn test_two_vector_mode_no_repeats() {
+        let left = vec![1, 2, 3];
+        let right = vec![4, 5, 6];
+        let result = two_vector_mode(left, right);
+        assert!(result.is_err());
+        assert_eq!(result.unwrap_err().to_string(), "There is no distinct mode.");
+    }
+
+    #[test]
+    fn test_two_vector_mode_float_no_repeats() {
+        let left = vec![1.0, 2.0, 3.0];
+        let right = vec![4.0, 5.0, 6.0];
+        let result = two_vector_mode_float(left, right);
+        assert!(result.is_err());
+        assert_eq!(result.unwrap_err().to_string(), "There is no distinct mode.");
     }
 }
 
