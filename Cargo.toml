@@ -12,3 +12,4 @@ path = "src/lib.rs"
 
 [dependencies]
 ordered-float = "3.7.0"
+itertools = "0.10.3"
