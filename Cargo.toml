@@ -1,6 +1,6 @@
 [package]
 name = "numbers_rus"
-version = "0.1.5"
+version = "0.1.6"
 authors = ["Ola Yeku <yekuola@gmail.com>"]
 edition = "2021"
 description = "A library for working with numbers. Supports operations on integers and floating-point numbers.  Operations can be performed on two numbers and one or two arrays."
@@ -9,6 +9,7 @@ license = "MIT OR Apache-2.0"
 [lib]
 name = "numbers_rus"
 path = "src/lib.rs"
+
 
 [dependencies]
 ordered-float = "3.7.0"
