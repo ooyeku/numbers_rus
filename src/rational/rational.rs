@@ -1,0 +1,169 @@
+use crate::floats::complex_floats;
+use crate::integers::complex_integers;
+
+pub struct Rational {
+    numerator: i32,
+    denominator: i32,
+}
+
+impl Rational {
+    pub fn new(numerator: i32, denominator: i32) -> Self {
+        assert_ne!(denominator, 0, "Denominator must not be zero!");
+        Self { numerator, denominator }
+    }
+
+    pub fn add(&self, other: &Self) -> Self {
+        let numerator = self.numerator * other.denominator + other.numerator * self.denominator;
+        let denominator = self.denominator * other.denominator;
+        Self::new(numerator, denominator)
+    }
+
+    // Add methods for subtract, multiply, divide etc. as needed
+    pub fn subtract(&self, other: &Self) -> Self {
+        let numerator = self.numerator * other.denominator - other.numerator * self.denominator;
+        let denominator = self.denominator * other.denominator;
+        Self::new(numerator, denominator)
+    }
+
+    pub fn multiply(&self, other: &Self) -> Self {
+        let numerator = self.numerator * other.numerator;
+        let denominator = self.denominator * other.denominator;
+        Self::new(numerator, denominator)
+    }
+
+    pub fn divide(&self, other: &Self) -> Self {
+        let numerator = self.numerator * other.denominator;
+        let denominator = self.denominator * other.numerator;
+        Self::new(numerator, denominator)
+    }
+
+    pub fn display(&self) {
+        println!("{}/{}", self.numerator, self.denominator);
+    }
+
+    pub fn get_numerator(&self) -> i32 {
+        self.numerator
+    }
+
+    pub fn get_denominator(&self) -> i32 {
+        self.denominator
+    }
+
+    pub fn simplify(&self) -> Self {
+        let mut numerator = self.numerator;
+        let mut denominator = self.denominator;
+        let mut gcd = 1;
+        for i in 1..=numerator.abs().min(denominator.abs()) {
+            if numerator % i == 0 && denominator % i == 0 {
+                gcd = i;
+            }
+        }
+        numerator /= gcd;
+        denominator /= gcd;
+        Self::new(numerator, denominator)
+    }
+
+    pub fn to_float(&self) -> f64 {
+        self.numerator as f64 / self.denominator as f64
+    }
+
+    pub fn to_complex_float(&self) -> complex_floats::Complex {
+        complex_floats::Complex::new(self.numerator as f64, self.denominator as f64)
+    }
+
+    pub fn to_complex_int(&self) -> complex_integers::Complex {
+        complex_integers::Complex::new(self.numerator as i128, self.denominator as i128)
+    }
+
+    pub fn to_string(&self) -> String {
+        format!("{}/{}", self.numerator, self.denominator)
+    }
+
+    pub fn to_string_complex(&self) -> String {
+        format!("{}/{}i", self.numerator, self.denominator)
+    }
+}
+#[cfg(test)]
+pub mod test_rational {
+
+    use super::*;
+    #[test]
+    fn test_add() {
+        let a = Rational::new(1, 2);
+        let b = Rational::new(1, 3);
+        let c = a.add(&b);
+        assert_eq!(c.get_numerator(), 5);
+        assert_eq!(c.get_denominator(), 6);
+    }
+    #[test]
+    fn test_subtract() {
+        let a = Rational::new(1, 2);
+        let b = Rational::new(1, 3);
+        let c = a.subtract(&b);
+        assert_eq!(c.get_numerator(), 1);
+        assert_eq!(c.get_denominator(), 6);
+    }
+    #[test]
+    fn test_multiply() {
+        let a = Rational::new(1, 2);
+        let b = Rational::new(1, 3);
+        let c = a.multiply(&b);
+        assert_eq!(c.get_numerator(), 1);
+        assert_eq!(c.get_denominator(), 6);
+    }
+    #[test]
+    fn test_divide() {
+        let a = Rational::new(1, 2);
+        let b = Rational::new(1, 3);
+        let c = a.divide(&b);
+        assert_eq!(c.get_numerator(), 3);
+        assert_eq!(c.get_denominator(), 2);
+    }
+    #[test]
+    fn test_simplify() {
+        let a = Rational::new(2, 4);
+        let b = a.simplify();
+        assert_eq!(b.get_numerator(), 1);
+        assert_eq!(b.get_denominator(), 2);
+    }
+    #[test]
+    fn test_to_float() {
+        let a = Rational::new(1, 2);
+        let b = a.to_float();
+        assert_eq!(b, 0.5);
+    }
+    #[test]
+    fn test_to_complex_float() {
+        let a = Rational::new(1, 2);
+        let b = a.to_complex_float();
+        b.display();
+        println!("{}, {}", b.get_real(), b.get_imag());
+        println!("{}, {}", b.get_real(), b.get_imag());
+        assert_eq!(b.get_real(), 1.0);
+        assert_eq!(b.get_imag(), 2.0);
+    }
+    #[test]
+    fn test_to_complex_int() {
+        let a = Rational::new(1, 2);
+        let b = a.to_complex_int();
+        b.display();
+        println!("{}, {}", b.get_real(), b.get_imag());
+        println!("{}, {}", b.get_real(), b.get_imag());
+        assert_eq!(b.get_real(), 1 as i128);
+        assert_eq!(b.get_imag(), 2 as i128);
+    }
+    #[test]
+    fn test_to_string() {
+        let a = Rational::new(1, 2);
+        let b = a.to_string();
+        a.display();
+        assert_eq!(b, "1/2");
+    }
+    #[test]
+    fn test_to_string_complex() {
+        let a = Rational::new(1, 2);
+        let b = a.to_string_complex();
+        a.display();
+        assert_eq!(b, "1/2i");
+    }
+}
