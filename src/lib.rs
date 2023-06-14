@@ -1,3 +1,5 @@
+pub mod integers;
+pub mod floats;
 
 /// Returns the sum of two numbers.
 pub fn add(left: i128, right: i128) -> i128 {
@@ -9,21 +11,22 @@ pub fn add_float(left: f64, right: f64) -> f64 {
 }
 #[cfg(test)]
 mod test_add {
-    use super::*;
+    use crate::integers::base::*;
+    use crate::floats::base_float::*;
 
     #[test]
     fn it_works() {
-        let result = add(2, 2);
+        let result = base::add(2, 2);
         assert_eq!(result, 4);
     }
     #[test]
     fn add_negatives() {
-        let result = add(-2, 2);
+        let result = base::add(-2,2);
         assert_eq!(result, 0);
     }
     #[test]
     fn add_floats() {
-        let result = add_float(2.0, 2.0);
+        let result = base_float::add_float(2.0, 2.0);
         assert_eq!(result, 4.0);
     }
 }
