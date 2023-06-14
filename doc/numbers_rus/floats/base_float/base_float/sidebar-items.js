@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["add_float","divide_float","factorial_float","fibonacci_float","is_even_float","is_odd_float","is_perfect_cube_float","is_perfect_power_float","is_perfect_square_float","is_prime_float","modulo_float","multiply_float","power_float","root_float","subtract_float"]};

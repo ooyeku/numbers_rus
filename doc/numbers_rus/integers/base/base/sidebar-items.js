@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["add","divide","factorial","fibonacci","is_even","is_odd","is_perfect_cube","is_perfect_power","is_perfect_square","is_prime","modulo","multiply","power","root","subtract"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["dataframe","double","equation","floats","integers","single"]};
