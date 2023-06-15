@@ -1,4 +1,4 @@
-use core::fmt;
+use std::fmt;
 
 pub struct Complex {
     real: f64,
@@ -44,7 +44,6 @@ impl Complex {
         Self::new(real, imag)
     }
 
-    // Add methods for divide, modulus, etc. as needed
     pub fn modulus(&self) -> f64 {
         (self.real.powi(2) + self.imag.powi(2)).sqrt()
     }
@@ -231,5 +230,11 @@ pub mod test_complex {
         let a = Complex::new(1.0, 2.0);
         let b = a.copy();
         assert_eq!(b.get(), (1.0, 2.0));
+    }
+    #[test]
+    fn test_equality() {
+        let a = Complex::new(1.0, 2.0);
+        let b = Complex::new(1.0, 2.0);
+        assert_eq!(a.display(), b.display());
     }
 }

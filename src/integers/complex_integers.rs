@@ -1,6 +1,24 @@
+use std::fmt;
+
 pub struct Complex {
     real: i128,
     imag: i128,
+}
+
+impl Default for Complex {
+    fn default() -> Self {
+        Self { real: 0, imag: 0 }
+    }
+}
+
+impl fmt::Display for Complex {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        if self.imag < 0 {
+            write!(f, "{} - {}i", self.real, -self.imag)
+        } else {
+            write!(f, "{} + {}i", self.real, self.imag)
+        }
+    }
 }
 
 impl Complex {
@@ -75,6 +93,26 @@ impl Complex {
     pub fn set(&mut self, real: i128, imag: i128) {
         self.real = real;
         self.imag = imag;
+    }
+
+    pub fn zero() -> Self {
+        Self::new(0, 0)
+    }
+
+    pub fn one() -> Self {
+        Self::new(1, 0)
+    }
+
+    pub fn from_real(real: i128) -> Self {
+        Self::new(real, 0)
+    }
+
+    pub fn from_imag(imag: i128) -> Self {
+        Self::new(0, imag)
+    }
+
+    pub fn copy(&self) -> Self {
+        Self::new(self.real, self.imag)
     }
 }
 #[cfg(test)]
@@ -167,6 +205,30 @@ pub mod test_complex {
         a.set(3, 4);
         assert_eq!(a.get(), (3, 4));
     }
-
-
+    #[test]
+    fn test_zero() {
+        let a = Complex::zero();
+        assert_eq!(a.get(), (0, 0));
+    }
+    #[test]
+    fn test_one() {
+        let a = Complex::one();
+        assert_eq!(a.get(), (1, 0));
+    }
+    #[test]
+    fn test_from_real() {
+        let a = Complex::from_real(1);
+        assert_eq!(a.get(), (1, 0));
+    }
+    #[test]
+    fn test_from_imag() {
+        let a = Complex::from_imag(1);
+        assert_eq!(a.get(), (0, 1));
+    }
+    #[test]
+    fn test_copy() {
+        let a = Complex::new(1, 2);
+        let b = a.copy();
+        assert_eq!(b.get(), (1, 2));
+    }
 }
