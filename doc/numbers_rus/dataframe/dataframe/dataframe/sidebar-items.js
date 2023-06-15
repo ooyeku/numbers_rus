@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["dataframe_create"],"struct":["DataFrame"]};

@@ -1,1 +1,0 @@
-window.ALL_CRATES = ["either","itertools","num_traits","numbers_rus","ordered_float"];

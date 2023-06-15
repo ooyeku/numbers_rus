@@ -1,21 +1,30 @@
 # Numbers Library
 **authors: "Ola Yeku"**
+
 ## Purpose:
 This library is used to perform various numerical operations in Rust.  
 The library is designed to be used in a variety of applications, including web services, command line utilities, and other Rust based applications.
+The project is currently in the early stages of development and is not yet ready for production use, but is available for testing and experimentation.
+The library is designed to be easy to use and understand, and is designed to be used by both beginners and advanced users. 
+
+Incremental updates will be made to the library as new features are added and bugs are fixed (possibly even introduced). 
+Future versions of this library will include support for more advanced numerical operations, including data analysis, statistics, probability, and 
+visualization.  Feel free to contribute to this project by submitting a pull request or by opening an issue and reporting and feedback or bugs.
+
+
 
 ## Download:
 #### From crates.io:
 This library can be downloaded from [crates.io](https://crates.io/crates/numbers_rus) using cargo:
 ```
-cargo install numbers_rus
+cargo add numbers_rus
 ```
 Add the following to your cargo.toml file:
 ```
 [dependencies]
-numbers_rus = "0.1.6"
+numbers_rus = "0.1.7"
 ```
-Current crates.io version: 0.1.6
+Current crates.io version: 0.1.7
 
 
 #### From Github:
@@ -24,45 +33,74 @@ and can be downloaded using git:
 ```
 git clone https://github.com/ooyeku/numbers_rus.git
 ```
+change directory to numbers_rus and test the library:
+```bash
+cd numbers_rus
+```
+``` bash
+cargo test
+```
+open the documentation:
+``` bash
+cargo doc --open
+```
 Current GitHub version: 0.1.7
 
+**Note:** The GitHub version may not be stable and will typically be ahead of the crates.io version.
 ## Examples:
 The following examples show how to use this library:
 
-``` 
-// Import the library
-use numbers_rus::numbers_rus::*
-// Basic operations
-add(1, 2)
-subtract(1, 2)
-multiply(1, 2)
-divide(1, 2)
-```
-```
-// Floating point operations
-add_float(1.0, 2.0)
-subtract_float(1.0, 2.0)
-multiply_float(1.0, 2.0)
-````
-````
-// Conditional Checks
-is_even(2)
-is_odd(2)
-is_prime(2)
-````
-````
-// Vector operations
-vector_sum(vec![1, 2, 3])
-vector_mean(vec![1, 2, 3])
-vector_median(vec![1, 2, 3])
-````
+``` rust
+use numbers_rus::equation::equation::equation::Equation;
+use rand::Rng;
 
-````
-// Equation operations
-let eq = Equation::new(2,4,'+');
-let mut result = eq.solve();
-eq.set_a(3);
-let result = eq.solve();
+fn main() {
+
+    /// Demonstrates using the Equations struct from the equation module in the numbers_rus crate.
+    /// The Example below creates an equation with two random numbers between 1 and 1,000,000 and
+    /// then prints the equation and the solution.  It then checks to see if the solution is prime
+    /// and if it is odd.  It then changes the operator to subtraction and repeats the process.
+
+    // Create random number generator
+    let mut rng = rand::thread_rng();
+
+    // start timer
+    let start = std::time::Instant::now();
+    let reps = 100;
+    for _ in 0..reps{
+        let a = rng.gen_range(1..=1_000_000);
+        let b = rng.gen_range(1..=1_000_000);
+        let mut c = Equation::new(a, b, '+');
+        println!("{} + {} = {}", a, b, c.get_sol());
+        if numbers_rus::integers::base::base::is_prime(c.get_sol()) {
+            println!("{} is prime", c.get_sol());
+        } else {
+            println!("{} is not prime", c.get_sol());
+        }
+        if numbers_rus::integers::base::base::is_odd(c.get_sol()) {
+            println!("{} is odd", c.get_sol());
+        } else {
+            println!("{} is even", c.get_sol());
+        }
+        // Change operator
+        c.set_operator('-');
+        println!("{} - {} = {}", a, b, c.get_sol());
+        if numbers_rus::integers::base::base::is_prime(c.get_sol()) {
+            println!("{} is prime", c.get_sol());
+        } else {
+            println!("{} is not prime", c.get_sol());
+        }
+        if numbers_rus::integers::base::base::is_odd(c.get_sol()) {
+            println!("{} is odd", c.get_sol());
+        } else {
+            println!("{} is even", c.get_sol());
+        }
+    }
+    // end timer
+    let duration = start.elapsed();
+    println!("Time to run {} reps: {:?}",reps, duration);
+}
+
 ````
 
 
@@ -79,13 +117,14 @@ The following features are planned for this library:
 - [x] Basic operations
 - [x] Add support for floating point numbers
 - [x] Add support for complex numbers
-- [x] Add support for vectors
-- [ ] Add support for matrices
-- [ ] Add support for tensors
+- [x] Add support for vectors and matrices
 ### Version 0.2.0
-- [ ] Add support for statistics
+- [ ] Add specialized data analysis functions
+- [ ] Add support for visualizations
+### Version 0.3.0
+- [ ] Add support for regression
 - [ ] Add support for probability
-- [ ] Add support for linear algebra
+- [ ] Add support for statistics
 
 
 ## Contributing:

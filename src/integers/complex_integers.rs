@@ -10,6 +10,7 @@ use std::fmt;
 ///
 /// let a = Complex::new(1, 2);
 /// let b = Complex::new(3, 4);
+/// println!("{},{}", a,b);
 /// ```
 ///
 /// # Methods
