@@ -1,5 +1,9 @@
-# Numbers Library
-**authors: "Ola Yeku"**
+# numbers_rus
+## a modular general purpose numbers library for Rust
+### with the ambition of being useful and intuitive.
+
+
+**authors: "ola yeku"**
 
 ## Purpose:
 This library is used to perform various numerical operations in Rust.  
