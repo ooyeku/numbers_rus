@@ -6,4 +6,4 @@ pub mod single;
 pub mod double;
 pub mod dataframe;
 pub mod equation;
-mod rational;
+pub mod rational;
