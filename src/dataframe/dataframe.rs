@@ -1,5 +1,3 @@
-pub mod dataframe {
-    // Dataframe functions  ----------------------------------------------------------------------------
 
 /// A dataframe struct similar to pythons pandas dataframe but with less functionality and only for integers
 /// The dataframe is stored as a vector of vectors
@@ -9,7 +7,7 @@ pub mod dataframe {
 ///
 /// # Example
 /// ```
-/// use numbers_rus::dataframe::dataframe::dataframe::DataFrame;
+/// use numbers_rus::dataframe::dataframe::DataFrame;
 /// let mut df = DataFrame::new();
 /// df.add_column("a", &vec![1, 2, 3]);
 /// df.add_column("b", &vec![4, 5, 6]);
@@ -135,4 +133,3 @@ mod test_dataframe_create {
         );
         }
     }
-}

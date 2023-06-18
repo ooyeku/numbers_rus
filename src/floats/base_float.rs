@@ -1,6 +1,4 @@
-//! The `base_float` module provides various mathematical functions and operations for `f64` numbers, including arithmetic operators (add, subtract, multiply, divide, and modulo), exponentiation and root calculation, factorial and Fibonacci sequence calculation, and functions to check primality (is prime), parity (is even or odd), perfect square, perfect cube, and perfect power properties of a given number.
-pub mod base_float {
-    /// This function takes two `f64` numbers as arguments, `left` and `right`, and returns their sum as an `f64`. The calculation is performed using native
+ /// This function takes two `f64` numbers as arguments, `left` and `right`, and returns their sum as an `f64`. The calculation is performed using native
 pub fn add_float(left: f64, right: f64) -> f64 {
         left + right
     }
@@ -84,5 +82,4 @@ pub fn is_perfect_cube_float(number: f64) -> bool {
 pub fn is_perfect_power_float(number: f64) -> bool {
         let sqrt = number.sqrt();
         sqrt * sqrt == number
-    }
 }

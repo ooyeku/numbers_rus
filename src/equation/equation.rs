@@ -1,12 +1,12 @@
-pub mod equation {
-    use crate::integers::base::*;
-    use crate::floats::base_float::*;
-      /// Equation struct that can be used to solve equations with two numbers and an operator (+, -, *, /, %, ^)
+use crate::integers::base::*;
+use crate::floats::base_float::*;
+
+/// Equation struct that can be used to solve equations with two numbers and an operator (+, -, *, /, %, ^)
 /// Sol is the solution to the equation and is calculated when get_sol() is called.
 ///
 /// # Example
 /// ```
-/// use numbers_rus::equation::equation::equation::Equation;
+/// use numbers_rus::equation::equation::Equation;
 /// let mut equation = Equation::new(1, 2, '+');
 /// assert_eq!(equation.get_sol(), 3);
 /// ```
@@ -30,12 +30,12 @@ impl Equation {
     pub fn get_sol(&mut self) -> i128 {
             if self.sol == 0 {
                 self.sol = match self.operator {
-                    '+' => base::add(self.a, self.b),
-                    '-' => base::subtract(self.a, self.b),
-                    '*' => base::multiply(self.a, self.b),
-                    '/' => base::divide(self.a, self.b),
-                    '%' => base::modulo(self.a, self.b),
-                    '^' => base::power(self.a, self.b),
+                    '+' => add(self.a, self.b),
+                    '-' => subtract(self.a, self.b),
+                    '*' => multiply(self.a, self.b),
+                    '/' => divide(self.a, self.b),
+                    '%' => modulo(self.a, self.b),
+                    '^' => power(self.a, self.b),
                     _ => 0,
                 };
             }
@@ -118,7 +118,7 @@ mod test_equation {
 /// EquationF is an equation similar to Equation, but with f64 values.  Sol is calculated when get_sol() is called.
 /// # Example
 /// ```
-/// use numbers_rus::equation::equation::equation::EquationF;
+/// use numbers_rus::equation::equation::EquationF;
 /// let mut equation = EquationF::new(1.092, 2.435, '+');
 /// assert_eq!(equation.get_sol(), 3.527);
 /// ```
@@ -141,12 +141,12 @@ impl EquationF {
     pub fn get_sol(&mut self) -> f64 {
             if self.sol == 0.0 {
                 self.sol = match self.operator {
-                    '+' => base_float::add_float(self.a, self.b),
-                    '-' => base_float::subtract_float(self.a, self.b),
-                    '*' => base_float::multiply_float(self.a, self.b),
-                    '/' => base_float::divide_float(self.a, self.b),
-                    '%' => base_float::modulo_float(self.a, self.b),
-                    '^' => base_float::power_float(self.a, self.b),
+                    '+' => add_float(self.a, self.b),
+                    '-' => subtract_float(self.a, self.b),
+                    '*' => multiply_float(self.a, self.b),
+                    '/' => divide_float(self.a, self.b),
+                    '%' => modulo_float(self.a, self.b),
+                    '^' => power_float(self.a, self.b),
                     _ => 0.0,
                 };
             }
@@ -250,7 +250,7 @@ mod test_equation_f {
 ///
 /// # Example
 /// ```
-/// use numbers_rus::equation::equation::equation::ZeroEquation;
+/// use numbers_rus::equation::equation::ZeroEquation;
 /// let mut equation = ZeroEquation::new(vec![1, 2, 3]);
 /// assert_eq!(equation.get_sol(), 0);
 /// ```
@@ -386,4 +386,3 @@ mod test_zero_equation {
             println!("error: {}", equation.is_valid());
         }
     }
-}

@@ -1,20 +1,4 @@
 
-//! single_vector module provides a set of functions for performing statistical calculations on vectors of 128-bit signed integers and 64-bit floating-point numbers.
-//!
-//! The module includes functions for calculating the following statistics:
-//! - Sum
-//! - Product
-//! - Mean
-//! - Median
-//! - Mode
-//! - Range
-//! - Interquartile Range
-//! - Variance
-//! - Standard Deviation
-//! - Quartiles (Q1, Q2, and Q3)
-//!
-pub mod single_vector {
-
 /// Returns the sum of all elements in a vector of 128-bit signed integers.
 ///
 /// # Arguments
@@ -346,4 +330,3 @@ pub fn vector_quartiles_float(vector: Vec<f64>) -> String {
 
         format!("Q1: {}, Q2: {}, Q3: {}", q1, q2, q3)
     }
-}
