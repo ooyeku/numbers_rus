@@ -2,24 +2,26 @@
 //! The operations include addition, subtraction, multiplication, division, power, root, minimum, maximum, average,
 //! median, and mode calculation. The results are returned as a comma-separated string representing the element-wise results
 //! of the applied operation.
+//!
+//! # Examples
+//! ```
+//! use numbers_rus::floats::complex_floats::Complex;
+//!
+//! let a = Complex::new(1.0, 2.0);
+//! let b = Complex::new(3.0, 4.0);
+//! let c = a.add(&b);
+//! assert_eq!(c.get_real(), 4.0);
+//! assert_eq!(c.get_imag(), 6.0);
+//! ```
 use std::fmt;
-
 /// A complex number is a number that can be expressed in the form a + bi, where a and b are real numbers, and i is a solution of the solve x2 = −1. Because no real number satisfies this solve, i is called an imaginary number. For the complex number a + bi, a is called the real part, and b is called the imaginary part. Despite the historical nomenclature "imaginary", complex numbers are regarded in the mathematical sciences as just as "real" as the real numbers, and are fundamental in many aspects of the scientific description of the natural world.
 ///
 /// Complex numbers allow solutions to certain equations that have no solutions in real numbers.
 ///
 ///
-/// # Examples
-///
-/// ```
-/// use numbers_rus::floats::complex_floats::Complex;
-///
-/// let a = Complex::new(1.0, 2.0);
-/// let b = Complex::new(3.0, 4.0);
-/// let c = a.add(&b);
-/// assert_eq!(c.get_real(), 4.0);
-/// assert_eq!(c.get_imag(), 6.0);
-/// ```
+/// # Arguments
+/// * `real` - The real part of the complex number
+/// * `imag` - The imaginary part of the complex number
 ///
 /// # Methods
 ///
@@ -40,8 +42,8 @@ use std::fmt;
 /// * `from_imag` - returns a new `Complex` instance with the real part set to zero and the imaginary part set to the input value.
 /// * `copy` - returns a new `Complex` instance with the real and imaginary parts set to the same values as the current instance.
 pub struct Complex {
-    real: f64,
-    imag: f64,
+    pub real: f64,
+    pub imag: f64,
 }
 
 impl Default for Complex {

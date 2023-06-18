@@ -1,6 +1,12 @@
 //! equation.rs is a module that contains the Equation, EquationF, and ZeroEquation structs.
 //! These structs are used to solve equations with numbers and an operator (+, -, *, /, %, ^)
 //! or to solve equations that equal zero.
+//!
+//! # Examples
+//! ```
+//! use numbers_rus::solve::equation::Equation;
+//! ```
+//!
 
 use crate::integers::base::*;
 use crate::floats::base_float::*;

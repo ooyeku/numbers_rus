@@ -1,13 +1,16 @@
 # numbers_rus
-## a modular general purpose numbers library for Rust
-### with the ambition of being useful and intuitive.
+## a modular general purpose numbers library for Rust with the ambition of being useful, performant, and easy to use.
+[![Crates.io](https://img.shields.io/crates/v/numbers_rus.svg)](https://crates.io/crates/numbers_rus)
+[![Documentation](https://docs.rs/numbers_rus/badge.svg)](https://docs.rs/numbers_rus)
 
 
-**authors: ola yeku**
+
+**authors: Ola Yeku**
 
 ## Purpose:
-This library is used to perform various numerical operations in Rust.  
-The library is designed to be used in a variety of applications, including web services, command line utilities, and other Rust based applications.
+This library is used to perform various numerical operations in Rust.  It is designed to be used in a variety of applications, including web services, command line utilities, and other Rust based applications.
+
+
 The project is currently in the early stages of development and is not yet ready for production use, but is available for testing and experimentation.
 The library is designed to be easy to use and understand, and is designed to be used by both beginners and advanced users. 
 
@@ -23,9 +26,9 @@ cargo add numbers_rus
 Add the following to your cargo.toml file:
 ```
 [dependencies]
-numbers_rus = "0.1.9"
+numbers_rus = "0.2.0"
 ```
-Current crates.io version: 0.1.9
+Current crates.io version: 0.2.0
 
 #### From Github:
 The source code for this library can be found on [Github](https://github.com/ooyeku/numbers_rus)
@@ -38,23 +41,22 @@ change directory to numbers_rus and test the library:
 cd numbers_rus
 ```
 ``` bash
-cargo test
+cargo test --lib
 ```
 open the documentation:
 ``` bash
 cargo doc --open
 ```
-Current GitHub version: 0.1.9
+Current GitHub version: 0.2.0
 
 **Note:** The GitHub version may not be stable and will typically be ahead of the crates.io version.
 ## Examples:
-The following examples show how to use this library:
 
+examples can be found in the examples directory of the source code.
+To run the examples, change directory to the source code directory and run the following command:  
 ```bash
 cargo run --package numbers_rus --example solver --release
 ```
-
-
 
 
 ## Roadmap:
@@ -71,7 +73,7 @@ The following features are planned for this library:
 - [x] Add support for complex numbers
 - [x] Add support for vectors 
 ### Version 0.2.0
-- [] Add support for matrices
+- [ ] Add support for matrices
 - [ ] Add specialized data analysis functions
 - [ ] Add support for graphics
 ### Version 0.3.0

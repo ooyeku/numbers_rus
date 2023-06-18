@@ -1,6 +1,6 @@
 [package]
 name = "numbers_rus"
-version = "0.1.9"
+version = "0.2.0"
 authors = ["Ola Yeku <yekuola@gmail.com>"]
 repository = "https://github.com/ooyeku/numbers_rus.git"
 edition = "2021"

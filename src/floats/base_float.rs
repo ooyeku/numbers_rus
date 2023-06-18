@@ -7,6 +7,14 @@
 //! * `modulo_float` - returns the modulo of two `f64` numbers
 //! * `power_float` - returns the first `f64` number raised to the power of the second `f64` number
 //! * `root_float` - returns the first `f64` number raised to the power of the inverse of the second `f64` number
+//!
+//! # Examples
+//! ```
+//! use numbers_rus::floats::base_float;
+//!
+//! let result = base_float::add_float(1.0, 2.0);
+//! assert_eq!(result, 3.0);
+//! ```
 
  /// This function takes two `f64` numbers as arguments, `left` and `right`, and returns their sum as an `f64`. The calculation is performed using native
 pub fn add_float(left: f64, right: f64) -> f64 {

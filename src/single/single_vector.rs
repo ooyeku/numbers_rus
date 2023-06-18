@@ -1,8 +1,18 @@
 //! Single-vector statistics module. This module contains functions that target the entire vector
 //! and return a single value (non-element-wise operations).
+//!
+//!
+//!
+//!  modules:
+//! * `single_vector`
+//!
+//! # Examples
+//! ```
+//! use numbers_rus::single::single_vector;
+//! ```
 
 
-/// Returns the sum of all elements in a vector of 128-bit signed integers.
+// Returns the sum of all elements in a vector of 128-bit signed integers.
 ///
 /// # Arguments
 ///

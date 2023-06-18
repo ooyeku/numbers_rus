@@ -1,3 +1,13 @@
+//! Rational numbers are numbers that can be in the form p/q where p and q are integers and q is not equal to zero.
+//!
+//! # Examples
+//!
+//! ```
+//! use numbers_rus::rational::rational::Rational;
+//!
+//! let a = Rational::new(1, 2);
+//! ```
+
 use crate::floats::complex_floats;
 use crate::integers::complex_integers;
 

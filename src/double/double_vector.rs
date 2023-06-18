@@ -1,7 +1,15 @@
 //! double_vector module for implementing various mathematical operations on vectors of i128 integers.
 //! The operations include addition, subtraction, multiplication, division, power, root, minimum, maximum, average,
-//! median, and mode calculation. The results are returned as a comma-separated string representing the element-wise results
-//! of the applied operation.
+//! median, and mode calculation. The results are returned as strings.
+//!
+//! # Examples
+//! ```
+//! use numbers_rus::double::double_vector;
+//! let left = vec![1, 2, 3];
+//! let right = vec![4, 5, 6];
+//! let result = double_vector::vector_add(left, right);
+//! assert_eq!(result, "5, 7, 9");
+//! ```
 use itertools::join;
 
 /// Returns the sum of two vectors as a string
