@@ -3,7 +3,7 @@ use crate::integers::base::*;
 use crate::floats::base_float::*;
 use crate::single::single_vector::*;
 use crate::double::double_vector::*;
-use crate::integers::base::*;
+
 
 #[cfg(test)]
 mod test_add {
@@ -30,7 +30,7 @@ mod test_add {
 mod test_subtract {
     use numbers_rus::floats::base_float;
     use super::*;
-    use crate::floats::base_float::*;
+
 
     #[test]
     fn it_works() {
@@ -265,7 +265,6 @@ mod test_is_perfect_power {
 }
 #[cfg(test)]
 mod test_vector_sum {
-    use numbers_rus::single::single_vector;
     use super::*;
 
     #[test]
@@ -282,7 +281,7 @@ mod test_vector_sum {
 #[cfg(test)]
 mod test_vector_product {
     use super::*;
-    use numbers_rus::single::single_vector;
+
     #[test]
     fn it_works() {
         let result = vector_product(vec![1, 2, 3]);

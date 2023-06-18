@@ -28,7 +28,7 @@ Add the following to your cargo.toml file:
 [dependencies]
 numbers_rus = "0.1.7"
 ```
-Current crates.io version: 0.1.7
+Current crates.io version: 0.1.8
 
 
 #### From Github:
@@ -124,7 +124,7 @@ The following features are planned for this library:
 - [x] Add support for vectors and matrices
 ### Version 0.2.0
 - [ ] Add specialized data analysis functions
-- [ ] Add support for visualizations
+- [ ] Add support for graphics
 ### Version 0.3.0
 - [ ] Add support for regression
 - [ ] Add support for probability
