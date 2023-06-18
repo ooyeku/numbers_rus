@@ -1,13 +1,13 @@
 
-/// A dataframe struct similar to pythons pandas dataframe but with less functionality and only for integers
-/// The dataframe is stored as a vector of vectors
+/// A dataframe structure similar to pythons pandas dataframe but with less functionality and only for integers
+/// The structures is stored as a vector of vectors
 /// The first vector contains the column names
 /// The rest of the vectors contain the data
 /// The data is stored as a vector of vectors
 ///
 /// # Example
 /// ```
-/// use numbers_rus::dataframe::dataframe::DataFrame;
+/// use numbers_rus::structures::dataframe::DataFrame;
 /// let mut df = DataFrame::new();
 /// df.add_column("a", &vec![1, 2, 3]);
 /// df.add_column("b", &vec![4, 5, 6]);
