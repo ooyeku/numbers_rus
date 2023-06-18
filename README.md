@@ -121,8 +121,9 @@ The following features are planned for this library:
 - [x] Basic operations
 - [x] Add support for floating point numbers
 - [x] Add support for complex numbers
-- [x] Add support for vectors and matrices
+- [x] Add support for vectors 
 ### Version 0.2.0
+- [] Add support for matrices
 - [ ] Add specialized data analysis functions
 - [ ] Add support for graphics
 ### Version 0.3.0
