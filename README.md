@@ -54,7 +54,8 @@ The following examples show how to use this library:
 cargo run --package numbers_rus --example solver --release
 ```
 
-```rust
+
+
 
 ## Roadmap:
 
