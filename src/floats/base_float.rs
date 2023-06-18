@@ -1,3 +1,13 @@
+//! base_float.rs contains functions that perform basic arithmetic operations on `f64` numbers. The functions are used by the `Float` struct.
+//! The functions include:
+//! * `add_float` - returns the sum of two `f64` numbers
+//! * `subtract_float` - returns the difference of two `f64` numbers
+//! * `multiply_float` - returns the product of two `f64` numbers
+//! * `divide_float` - returns the quotient of two `f64` numbers
+//! * `modulo_float` - returns the modulo of two `f64` numbers
+//! * `power_float` - returns the first `f64` number raised to the power of the second `f64` number
+//! * `root_float` - returns the first `f64` number raised to the power of the inverse of the second `f64` number
+
  /// This function takes two `f64` numbers as arguments, `left` and `right`, and returns their sum as an `f64`. The calculation is performed using native
 pub fn add_float(left: f64, right: f64) -> f64 {
         left + right

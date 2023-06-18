@@ -1,3 +1,7 @@
+//! The `base` module provides a collection of mathematical functions, such as addition, subtraction, multiplication, division,
+//! modulo, power, root, factorial, fibonacci, and various checks (prime, even, odd, perfect square, perfect cube, etc.). These functions
+//! operate on i128 integers and may panic in some cases if input constraints are not met (e.g., negative exponents or divisors, or non-integer
+//! roots), so it is important to ensure proper input values are provided.
 
     /// `add` function: Takes in two i128 integers `left` and `right` as input and returns their sum as an i128 integer.
     pub fn add(left: i128, right: i128) -> i128 {

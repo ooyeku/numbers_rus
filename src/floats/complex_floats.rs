@@ -1,6 +1,10 @@
+//! complex_floats module for implementing various mathematical operations on complex floating-point numbers.
+//! The operations include addition, subtraction, multiplication, division, power, root, minimum, maximum, average,
+//! median, and mode calculation. The results are returned as a comma-separated string representing the element-wise results
+//! of the applied operation.
 use std::fmt;
 
-/// A complex number is a number that can be expressed in the form a + bi, where a and b are real numbers, and i is a solution of the equation x2 = −1. Because no real number satisfies this equation, i is called an imaginary number. For the complex number a + bi, a is called the real part, and b is called the imaginary part. Despite the historical nomenclature "imaginary", complex numbers are regarded in the mathematical sciences as just as "real" as the real numbers, and are fundamental in many aspects of the scientific description of the natural world.
+/// A complex number is a number that can be expressed in the form a + bi, where a and b are real numbers, and i is a solution of the solve x2 = −1. Because no real number satisfies this solve, i is called an imaginary number. For the complex number a + bi, a is called the real part, and b is called the imaginary part. Despite the historical nomenclature "imaginary", complex numbers are regarded in the mathematical sciences as just as "real" as the real numbers, and are fundamental in many aspects of the scientific description of the natural world.
 ///
 /// Complex numbers allow solutions to certain equations that have no solutions in real numbers.
 ///

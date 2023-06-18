@@ -1,4 +1,3 @@
-
-//! single_vector module provides a set of functions for performing statistical calculations on
-//! vectors of 128-bit signed integers and 64-bit floating-point numbers.
+//! Single vector module. This module contains the single vector implementation along with
+//! operations that target each element of the vector (element-wise operations).
 pub mod single_vector;

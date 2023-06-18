@@ -1,3 +1,7 @@
+//! dataframe.rs contains the dataframe implementation and operations that target the dataframe
+//! as a whole (non-element-wise operations).
+//! The dataframe structure is similar to pythons pandas dataframe but with less functionality and only for integers.
+//! The dataframe is stored as a vector of vectors.
 
 /// A dataframe structure similar to pythons pandas dataframe but with less functionality and only for integers
 /// The structures is stored as a vector of vectors

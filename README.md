@@ -48,7 +48,7 @@ open the documentation:
 ``` bash
 cargo doc --open
 ```
-Current GitHub version: 0.1.7
+Current GitHub version: 0.1.8
 
 **Note:** The GitHub version may not be stable and will typically be ahead of the crates.io version.
 ## Examples:
