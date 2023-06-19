@@ -9,3 +9,4 @@
 //! use numbers_rus::double;
 //! ```
 pub mod double_vector;
+mod double_matrix;
