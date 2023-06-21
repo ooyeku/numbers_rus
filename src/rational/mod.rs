@@ -3,7 +3,7 @@
 //!
 //! # Examples
 //! ```
-//! use numbers_rus::rational::rational::Rational;
+//! use numbers_rus::rational::rational_integer::Rational;
 //!
 //! let a = Rational::new(1, 2);
 //! let numerator = a.get_numerator();
@@ -11,4 +11,5 @@
 //! assert_eq!(numerator, 1);
 //! assert_eq!(denominator, 2);
 //! ```
-pub mod rational;
+pub mod rational_integer;
+pub mod rational_float;
