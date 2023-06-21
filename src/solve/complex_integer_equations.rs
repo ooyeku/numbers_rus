@@ -1,6 +1,22 @@
+//! # Complex Integer Equation Module
 use crate::integers::complex_integers::Complex;
 
-
+/// Equation struct for complex integers that holds the left and right side of the equation, the operation, and the solution.
+/// The solution is calculated during initialization.  The left and right side of the equation are immutable.
+///
+/// # Examples
+/// ```
+/// use numbers_rus::solve::complex_integer_equations::Equation;
+/// use numbers_rus::integers::complex_integers::Complex;
+///
+/// let left = Complex::new(1, 1);
+/// let right = Complex::new(1, 1);
+/// let operation = '*';
+/// let equation = Equation::new(left, right, operation);
+/// assert_eq!(equation.left, Complex::new(1, 1));
+/// assert_eq!(equation.right, Complex::new(1, 1));
+/// assert_eq!(equation.sol, Complex::new(0, 2));
+/// ```
 pub struct Equation {
     pub left: Complex,
     pub right: Complex,
@@ -8,7 +24,6 @@ pub struct Equation {
     pub sol: Complex,
 }
 
-// Complex Equation implementation solves the equation during initialization
 impl Equation {
     pub fn new(left: Complex, right: Complex, operation: char) -> Equation {
         let sol = match operation {
@@ -25,15 +40,15 @@ impl Equation {
             sol,
         }
     }
-
+    /// Returns a reference to the solution of the equation
     pub fn get_sol(&mut self) -> &Complex {
         &self.sol
     }
-
+    /// Returns a reference to the left side of the equation
     pub fn get_left(&mut self) -> &Complex {
         &self.left
     }
-
+    /// Returns a reference to the right side of the equation
     pub fn get_right(&mut self) -> &Complex {
         &self.right
     }

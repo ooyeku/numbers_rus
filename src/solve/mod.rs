@@ -6,7 +6,7 @@
 //! ```
 //!
 pub mod equation;
-mod complex_integer_equations;
-mod complex_float_equations;
-mod rational_integer_equation;
-mod rational_float_equation;
+pub mod complex_integer_equations;
+pub mod complex_float_equations;
+pub mod rational_integer_equation;
+pub mod rational_float_equation;

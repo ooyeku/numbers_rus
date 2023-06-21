@@ -1,13 +1,31 @@
+//! # Complex Float Equations Module
 use crate::floats::complex_floats::Complex;
 
-
+/// Equation struct for Complex floats.  Solves the equation during initialization, and stores the solution
+/// as a Complex float.  The left and right sides of the equation are stored as Complex floats and the operation
+/// is stored as a char.
+///
+/// # Examples
+/// ```
+/// use numbers_rus::solve::complex_float_equations::Equation;
+/// use numbers_rus::floats::complex_floats::Complex;
+///
+/// let left = Complex::new(1.0, 1.0);
+/// let right = Complex::new(1.0, 1.0);
+/// let operation = '*';
+/// let equation = Equation::new(left, right, operation);
+/// assert_eq!(equation.left, Complex::new(1.0, 1.0));
+/// assert_eq!(equation.right, Complex::new(1.0, 1.0));
+/// assert_eq!(equation.sol, Complex::new(0.0, 2.0));
+/// ```
+///
 pub struct Equation {
     pub left: Complex,
     pub right: Complex,
     pub operation: char,
     pub sol: Complex,
 }
-// Complex Equation implementation solves the equation during initialization
+
 impl Equation {
     pub fn new(left: Complex, right: Complex, operation: char) -> Equation {
         let sol = match operation {
@@ -24,15 +42,15 @@ impl Equation {
             sol,
         }
     }
-
+    /// Returns a reference to the solution of the equation
     pub fn get_sol(&mut self) -> &Complex {
         &self.sol
     }
-
+    /// Returns a reference to the left side of the equation
     pub fn get_left(&mut self) -> &Complex {
         &self.left
     }
-
+    /// Returns a reference to the right side of the equation
     pub fn get_right(&mut self) -> &Complex {
         &self.right
     }
@@ -137,5 +155,4 @@ mod test_equation {
         let right = Complex::new(1.0, 1.0);
         assert_eq!(left.subtract(&right), Complex::new(1.0, 1.0));
     }
-
 }

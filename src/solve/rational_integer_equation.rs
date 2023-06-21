@@ -1,16 +1,32 @@
-// complex rational int equations
+//! # Rational Integer Equation Module
 use crate::rational::rational_integer::Rational;
 
+/// A rational integer equation is a structure that holds two rational integers and an operator.
+/// The solution is calculated during initialization.  The left and right side of the equation are immutable.
+///
+/// # Examples
+/// ```
+/// use numbers_rus::solve::rational_integer_equation::RationalIntegerEquation;
+/// use numbers_rus::rational::rational_integer::Rational;
+///
+/// let left = Rational::new(1, 1);
+/// let right = Rational::new(1, 1);
+/// let operation = '*';
+/// let equation = RationalIntegerEquation::new(left, right, operation);
+/// assert_eq!(equation.left, Rational::new(1, 1));
+/// assert_eq!(equation.right, Rational::new(1, 1));
+/// assert_eq!(equation.sol, Rational::new(1, 1));
+/// ```
 #[derive(Debug, Clone)]
-pub struct ComplexRationalIntegerEquation {
+pub struct RationalIntegerEquation {
     pub left: Rational,
     pub right: Rational,
     pub operator: char,
     pub sol: Rational,
 }
 
-impl ComplexRationalIntegerEquation {
-    pub fn new(left: Rational, right: Rational, operator: char) -> ComplexRationalIntegerEquation {
+impl RationalIntegerEquation {
+    pub fn new(left: Rational, right: Rational, operator: char) -> RationalIntegerEquation {
         let sol = match operator {
             '+' => left.add(&right),
             '-' => left.subtract(&right),
@@ -18,22 +34,22 @@ impl ComplexRationalIntegerEquation {
             '/' => left.divide(&right),
             _ => panic!("Invalid operation"),
         };
-        ComplexRationalIntegerEquation {
+        RationalIntegerEquation {
             left,
             right,
             operator,
             sol,
         }
     }
-
+    /// Returns a reference to the solution of the equation
     pub fn get_sol(&mut self) -> &Rational {
         &self.sol
     }
-
+    /// Returns a reference to the left side of the equation
     pub fn get_left(&mut self) -> &Rational {
         &self.left
     }
-
+    /// Returns a reference to the right side of the equation
     pub fn get_right(&mut self) -> &Rational {
         &self.right
     }
@@ -47,7 +63,7 @@ mod test_complex_rational_integer_equation {
         let left = Rational::new(1, 2);
         let right = Rational::new(1, 2);
         let operator = '+';
-        let equation = ComplexRationalIntegerEquation::new(left, right, operator);
+        let equation = RationalIntegerEquation::new(left, right, operator);
         assert_eq!(equation.left, Rational::new(1, 2));
         assert_eq!(equation.right, Rational::new(1, 2));
         assert_eq!(equation.sol, Rational::new(4, 4)); // 1/2 + 1/2 = 4/4 = 2/2 = 1
@@ -58,7 +74,7 @@ mod test_complex_rational_integer_equation {
         let left = Rational::new(1, 2);
         let right = Rational::new(1, 2);
         let operator = '+';
-        let mut equation = ComplexRationalIntegerEquation::new(left, right, operator);
+        let mut equation = RationalIntegerEquation::new(left, right, operator);
         assert_eq!(equation.get_sol(), &Rational::new(4, 4));
     }
 
@@ -67,7 +83,7 @@ mod test_complex_rational_integer_equation {
         let left = Rational::new(1, 2);
         let right = Rational::new(1, 2);
         let operator = '+';
-        let mut equation = ComplexRationalIntegerEquation::new(left, right, operator);
+        let mut equation = RationalIntegerEquation::new(left, right, operator);
         assert_eq!(equation.get_left(), &Rational::new(1, 2));
     }
 
@@ -76,7 +92,7 @@ mod test_complex_rational_integer_equation {
         let left = Rational::new(1, 2);
         let right = Rational::new(1, 2);
         let operator = '+';
-        let mut equation = ComplexRationalIntegerEquation::new(left, right, operator);
+        let mut equation = RationalIntegerEquation::new(left, right, operator);
         assert_eq!(equation.get_right(), &Rational::new(1, 2));
     }
 
@@ -85,7 +101,7 @@ mod test_complex_rational_integer_equation {
         let left = Rational::new(1, 2);
         let right = Rational::new(1, 2);
         let operator = '+';
-        let mut equation = ComplexRationalIntegerEquation::new(left, right, operator);
+        let mut equation = RationalIntegerEquation::new(left, right, operator);
         assert_eq!(equation.get_sol(), &Rational::new(4, 4));
     }
 
@@ -94,7 +110,7 @@ mod test_complex_rational_integer_equation {
         let left = Rational::new(1, 2);
         let right = Rational::new(1, 2);
         let operator = '-';
-        let mut equation = ComplexRationalIntegerEquation::new(left, right, operator);
+        let mut equation = RationalIntegerEquation::new(left, right, operator);
         assert_eq!(equation.get_sol(), &Rational::new(0, 4));
     }
 
@@ -103,7 +119,7 @@ mod test_complex_rational_integer_equation {
         let left = Rational::new(1, 2);
         let right = Rational::new(1, 2);
         let operator = '*';
-        let mut equation = ComplexRationalIntegerEquation::new(left, right, operator);
+        let mut equation = RationalIntegerEquation::new(left, right, operator);
         assert_eq!(equation.get_sol(), &Rational::new(1, 4));
     }
 
@@ -112,7 +128,7 @@ mod test_complex_rational_integer_equation {
         let left = Rational::new(1, 2);
         let right = Rational::new(1, 2);
         let operator = '/';
-        let mut equation = ComplexRationalIntegerEquation::new(left, right, operator);
+        let mut equation = RationalIntegerEquation::new(left, right, operator);
         assert_eq!(equation.get_sol(), &Rational::new(2, 2));
     }
 }
