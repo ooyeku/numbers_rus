@@ -52,4 +52,88 @@ mod test_equation {
         assert_eq!(equation.right, Complex::new(1, 1));
         assert_eq!(equation.sol, Complex::new(2, 2));
     }
+
+    #[test]
+    fn test_get_sol() {
+        let left = Complex::new(1, 1);
+        let right = Complex::new(1, 1);
+        let operation = '+';
+        let mut equation = Equation::new(left, right, operation);
+        assert_eq!(equation.get_sol(), &Complex::new(2, 2));
+    }
+
+    #[test]
+    fn test_get_left() {
+        let left = Complex::new(1, 1);
+        let right = Complex::new(1, 1);
+        let operation = '+';
+        let mut equation = Equation::new(left, right, operation);
+        assert_eq!(equation.get_left(), &Complex::new(1, 1));
+    }
+
+    #[test]
+    fn test_get_right() {
+        let left = Complex::new(1, 1);
+        let right = Complex::new(1, 1);
+        let operation = '+';
+        let mut equation = Equation::new(left, right, operation);
+        assert_eq!(equation.get_right(), &Complex::new(1, 1));
+    }
+
+    #[test]
+    fn test_full() {
+        let left = Complex::new(1, 1);
+        let right = Complex::new(1, 1);
+        let operation = '+';
+        let mut equation = Equation::new(left, right, operation);
+        assert_eq!(equation.get_left(), &Complex::new(1, 1));
+        assert_eq!(equation.get_right(), &Complex::new(1, 1));
+        assert_eq!(equation.get_sol(), &Complex::new(2, 2));
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_invalid_operation() {
+        let left = Complex::new(1, 1);
+        let right = Complex::new(1, 1);
+        let operation = 'a';
+        let equation = Equation::new(left, right, operation);
+        assert_eq!(equation.left, Complex::new(1, 1));
+    }
+
+    #[test]
+    fn test_add() {
+        let left = Complex::new(1, 1);
+        let right = Complex::new(1, 1);
+        let operation = '+';
+        let mut equation = Equation::new(left, right, operation);
+        assert_eq!(equation.get_sol(), &Complex::new(2, 2));
+    }
+
+    #[test]
+    fn test_subtract() {
+        let left = Complex::new(1, 1);
+        let right = Complex::new(1, 1);
+        let operation = '-';
+        let mut equation = Equation::new(left, right, operation);
+        assert_eq!(equation.get_sol(), &Complex::new(0, 0));
+    }
+
+    #[test]
+    fn test_multiply() {
+        let left = Complex::new(1, 1);
+        let right = Complex::new(1, 1);
+        let operation = '*';
+        let mut equation = Equation::new(left, right, operation);
+        assert_eq!(equation.get_sol(), &Complex::new(0, 2));
+    }
+
+    #[test]
+    fn test_divide() {
+        let left = Complex::new(1, 1);
+        let right = Complex::new(1, 1);
+        let operation = '/';
+        let mut equation = Equation::new(left, right, operation);
+        assert_eq!(equation.get_sol(), &Complex::new(1, 0));
+    }
 }

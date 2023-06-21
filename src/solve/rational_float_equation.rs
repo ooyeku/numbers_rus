@@ -52,4 +52,88 @@ mod test_complex_rational_float_equation {
         assert_eq!(equation.right, Rational::new(1.0, 2.0));
         assert_eq!(equation.sol, Rational::new(4.0, 4.0)); // 1/2 + 1/2 = 4/4 = 2/2 = 1
     }
+
+    #[test]
+    fn test_get_sol() {
+        let left = Rational::new(1.0, 2.0);
+        let right = Rational::new(1.0, 2.0);
+        let operator = '+';
+        let mut equation = ComplexRationalFloatEquation::new(left, right, operator);
+        assert_eq!(equation.get_sol(), &Rational::new(4.0, 4.0));
+    }
+
+    #[test]
+    fn test_get_left() {
+        let left = Rational::new(1.0, 2.0);
+        let right = Rational::new(1.0, 2.0);
+        let operator = '+';
+        let mut equation = ComplexRationalFloatEquation::new(left, right, operator);
+        assert_eq!(equation.get_left(), &Rational::new(1.0, 2.0));
+    }
+
+    #[test]
+    fn test_get_right() {
+        let left = Rational::new(1.0, 2.0);
+        let right = Rational::new(1.0, 2.0);
+        let operator = '+';
+        let mut equation = ComplexRationalFloatEquation::new(left, right, operator);
+        assert_eq!(equation.get_right(), &Rational::new(1.0, 2.0));
+    }
+
+    #[test]
+    fn test_get_operator() {
+        let left = Rational::new(1.0, 2.0);
+        let right = Rational::new(1.0, 2.0);
+        let operator = '+';
+        let equation = ComplexRationalFloatEquation::new(left, right, operator);
+        assert_eq!(equation.operator, '+');
+    }
+
+    #[test]
+    fn test_set_sol() {
+        let left = Rational::new(1.0, 2.0);
+        let right = Rational::new(1.0, 2.0);
+        let operator = '+';
+        let mut equation = ComplexRationalFloatEquation::new(left, right, operator);
+        equation.sol = Rational::new(1.0, 2.0);
+        assert_eq!(equation.sol, Rational::new(1.0, 2.0));
+    }
+
+    #[test]
+    fn test_set_left() {
+        let left = Rational::new(1.0, 2.0);
+        let right = Rational::new(1.0, 2.0);
+        let operator = '+';
+        let mut equation = ComplexRationalFloatEquation::new(left, right, operator);
+        equation.left = Rational::new(1.0, 2.0);
+        assert_eq!(equation.left, Rational::new(1.0, 2.0));
+    }
+
+    #[test]
+    fn test_set_right() {
+        let left = Rational::new(1.0, 2.0);
+        let right = Rational::new(1.0, 2.0);
+        let operator = '+';
+        let mut equation = ComplexRationalFloatEquation::new(left, right, operator);
+        equation.right = Rational::new(1.0, 2.0);
+        assert_eq!(equation.right, Rational::new(1.0, 2.0));
+    }
+
+    #[test]
+    fn test_set_operator() {
+        let left = Rational::new(1.0, 2.0);
+        let right = Rational::new(1.0, 2.0);
+        let mut equation = ComplexRationalFloatEquation::new(left, right, '+');
+        equation.operator = '-';
+        assert_eq!(equation.operator, '-');
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_invalid_operator() {
+        let left = Rational::new(1.0, 2.0);
+        let right = Rational::new(1.0, 2.0);
+        let operator = 'a';
+        ComplexRationalFloatEquation::new(left, right, operator);
+    }
 }

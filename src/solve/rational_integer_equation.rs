@@ -52,4 +52,67 @@ mod test_complex_rational_integer_equation {
         assert_eq!(equation.right, Rational::new(1, 2));
         assert_eq!(equation.sol, Rational::new(4, 4)); // 1/2 + 1/2 = 4/4 = 2/2 = 1
     }
+
+    #[test]
+    fn test_get_sol() {
+        let left = Rational::new(1, 2);
+        let right = Rational::new(1, 2);
+        let operator = '+';
+        let mut equation = ComplexRationalIntegerEquation::new(left, right, operator);
+        assert_eq!(equation.get_sol(), &Rational::new(4, 4));
+    }
+
+    #[test]
+    fn test_get_left() {
+        let left = Rational::new(1, 2);
+        let right = Rational::new(1, 2);
+        let operator = '+';
+        let mut equation = ComplexRationalIntegerEquation::new(left, right, operator);
+        assert_eq!(equation.get_left(), &Rational::new(1, 2));
+    }
+
+    #[test]
+    fn test_get_right() {
+        let left = Rational::new(1, 2);
+        let right = Rational::new(1, 2);
+        let operator = '+';
+        let mut equation = ComplexRationalIntegerEquation::new(left, right, operator);
+        assert_eq!(equation.get_right(), &Rational::new(1, 2));
+    }
+
+    #[test]
+    fn test_add() {
+        let left = Rational::new(1, 2);
+        let right = Rational::new(1, 2);
+        let operator = '+';
+        let mut equation = ComplexRationalIntegerEquation::new(left, right, operator);
+        assert_eq!(equation.get_sol(), &Rational::new(4, 4));
+    }
+
+    #[test]
+    fn test_subtract() {
+        let left = Rational::new(1, 2);
+        let right = Rational::new(1, 2);
+        let operator = '-';
+        let mut equation = ComplexRationalIntegerEquation::new(left, right, operator);
+        assert_eq!(equation.get_sol(), &Rational::new(0, 4));
+    }
+
+    #[test]
+    fn test_multiply() {
+        let left = Rational::new(1, 2);
+        let right = Rational::new(1, 2);
+        let operator = '*';
+        let mut equation = ComplexRationalIntegerEquation::new(left, right, operator);
+        assert_eq!(equation.get_sol(), &Rational::new(1, 4));
+    }
+
+    #[test]
+    fn test_divide() {
+        let left = Rational::new(1, 2);
+        let right = Rational::new(1, 2);
+        let operator = '/';
+        let mut equation = ComplexRationalIntegerEquation::new(left, right, operator);
+        assert_eq!(equation.get_sol(), &Rational::new(2, 2));
+    }
 }
