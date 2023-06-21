@@ -41,6 +41,7 @@ use std::fmt;
 /// * `from_real` - returns a new `Complex` instance with the real part set to the input value and the imaginary part set to zero.
 /// * `from_imag` - returns a new `Complex` instance with the real part set to zero and the imaginary part set to the input value.
 /// * `copy` - returns a new `Complex` instance with the real and imaginary parts set to the same values as the current instance.
+#[derive(Debug, Copy, Clone, PartialEq)]
 pub struct Complex {
     pub real: f64,
     pub imag: f64,

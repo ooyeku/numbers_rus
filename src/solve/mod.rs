@@ -6,3 +6,5 @@
 //! ```
 //!
 pub mod equation;
+mod complex_integer_equations;
+mod complex_float_equations;
