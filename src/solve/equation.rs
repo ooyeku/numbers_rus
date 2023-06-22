@@ -30,9 +30,9 @@ impl Equation {
         /// Creates a new equation
     pub fn new(a: i128, b: i128, operator: char) -> Equation {
             Equation {
-                a: a,
-                b: b,
-                operator: operator,
+                a,
+                b,
+                operator,
                 sol: 0,
             }
         }
@@ -319,7 +319,7 @@ impl ZeroEquation {
         }
         }
     /// returns true if the values add up to the solution
-    pub fn is_valid(&mut self) -> bool {
+    pub fn check_valid(&mut self) -> bool {
             self.check_sol();
             self.is_valid
         }
@@ -350,7 +350,7 @@ mod test_zero_equation {
             assert_eq!(equation.get_values(), vec![1, 2]);
             assert_eq!(equation.get_value(0), 1);
             assert_eq!(equation.get_value(1), 2);
-            assert_eq!(equation.is_valid(), true);
+            assert_eq!(equation.check_valid(), true);
             assert_eq!(equation.get_error(), 0);
         }
     #[test]
@@ -378,7 +378,7 @@ mod test_zero_equation {
     #[test]
     fn is_valid() {
             let mut equation = ZeroEquation::new(vec![1, 2, 3]);
-            assert_eq!(equation.is_valid(), false);
+            assert_eq!(equation.check_valid(), false);
         }
     #[test]
     fn get_error() {
@@ -393,6 +393,6 @@ mod test_zero_equation {
             equation.add_value(4);
             println!("solution: {}", equation.get_sol());
             println!("values: {:?}", equation.get_values());
-            println!("error: {}", equation.is_valid());
+            println!("error: {}", equation.check_valid());
         }
     }

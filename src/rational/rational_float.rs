@@ -3,7 +3,7 @@
 //! # Examples
 //!
 //! ```
-//! use numbers_rus::rational::rational::Rational;
+//! use numbers_rus::rational::rational_integer::Rational;
 //!
 //! let a = Rational::new(1, 2);
 //! ```
@@ -16,7 +16,7 @@ use crate::integers::complex_integers;
 /// # Examples
 ///
 /// ```
-/// use numbers_rus::rational::rational::Rational;
+/// use numbers_rus::rational::rational_integer::Rational;
 ///
 /// let a = Rational::new(1, 2);
 /// ```
@@ -38,14 +38,15 @@ use crate::integers::complex_integers;
 /// * `to_string(&self) -> String`
 /// * `to_string_complex(&self) -> String`
 ///
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Rational {
-    numerator: i32,
-    denominator: i32,
+    numerator: f64,
+    denominator: f64,
 }
 
 impl Rational {
-    pub fn new(numerator: i32, denominator: i32) -> Self {
-        assert_ne!(denominator, 0, "Denominator must not be zero!");
+    pub fn new(numerator: f64, denominator: f64) -> Self {
+        assert_ne!(denominator, 0.0, "Denominator must not be zero!");
         Self { numerator, denominator }
     }
 
@@ -58,7 +59,7 @@ impl Rational {
     /// # Examples
     ///
     /// ```
-    /// use numbers_rus::rational::rational::Rational;
+    /// use numbers_rus::rational::rational_integer::Rational;
     ///
     /// let a = Rational::new(1, 2);
     /// let b = Rational::new(1, 3);
@@ -81,7 +82,7 @@ impl Rational {
     /// # Examples
     ///
     /// ```
-    /// use numbers_rus::rational::rational::Rational;
+    /// use numbers_rus::rational::rational_integer::Rational;
     ///
     /// let a = Rational::new(1, 2);
     /// let b = Rational::new(1, 3);
@@ -104,7 +105,7 @@ impl Rational {
     /// # Examples
     ///
     /// ```
-    /// use numbers_rus::rational::rational::Rational;
+    /// use numbers_rus::rational::rational_integer::Rational;
     ///
     /// let a = Rational::new(1, 2);
     /// let b = Rational::new(1, 3);
@@ -127,7 +128,7 @@ impl Rational {
     /// # Examples
     ///
     /// ```
-    /// use numbers_rus::rational::rational::Rational;
+    /// use numbers_rus::rational::rational_integer::Rational;
     ///
     /// let a = Rational::new(1, 2);
     /// let b = Rational::new(1, 3);
@@ -145,11 +146,11 @@ impl Rational {
         println!("{}/{}", self.numerator, self.denominator);
     }
 
-    pub fn get_numerator(&self) -> i32 {
+    pub fn get_numerator(&self) -> f64 {
         self.numerator
     }
 
-    pub fn get_denominator(&self) -> i32 {
+    pub fn get_denominator(&self) -> f64 {
         self.denominator
     }
 
@@ -158,7 +159,7 @@ impl Rational {
     /// # Examples
     ///
     /// ```
-    /// use numbers_rus::rational::rational::Rational;
+    /// use numbers_rus::rational::rational_integer::Rational;
     ///
     /// let a = Rational::new(2, 4);
     /// let b = a.simplify();
@@ -168,10 +169,10 @@ impl Rational {
     pub fn simplify(&self) -> Self {
         let mut numerator = self.numerator;
         let mut denominator = self.denominator;
-        let mut gcd = 1;
-        for i in 1..=numerator.abs().min(denominator.abs()) {
-            if numerator % i == 0 && denominator % i == 0 {
-                gcd = i;
+        let mut gcd = 1.0;
+        for i in 1..=numerator.abs().min(denominator.abs()) as i32 {
+            if numerator % i as f64 == 0.0 && denominator % i as f64 == 0.0 {
+                gcd = i as f64;
             }
         }
         numerator /= gcd;
@@ -179,8 +180,8 @@ impl Rational {
         Self::new(numerator, denominator)
     }
 
-    pub fn to_float(&self) -> f64 {
-        self.numerator as f64 / self.denominator as f64
+    pub fn to_float(&self) -> i128 {
+        self.numerator as i128 / self.denominator as i128
     }
 
     /// convert to complex number with real and imaginary parts as floats
@@ -207,52 +208,52 @@ pub mod test_rational {
     use super::*;
     #[test]
     fn test_add() {
-        let a = Rational::new(1, 2);
-        let b = Rational::new(1, 3);
+        let a = Rational::new(1.0, 2.0);
+        let b = Rational::new(1.0, 3.0);
         let c = a.add(&b);
-        assert_eq!(c.get_numerator(), 5);
-        assert_eq!(c.get_denominator(), 6);
+        assert_eq!(c.get_numerator(), 5.0);
+        assert_eq!(c.get_denominator(), 6.0);
     }
     #[test]
     fn test_subtract() {
-        let a = Rational::new(1, 2);
-        let b = Rational::new(1, 3);
+        let a = Rational::new(1.0, 2.0);
+        let b = Rational::new(1.0, 3.0);
         let c = a.subtract(&b);
-        assert_eq!(c.get_numerator(), 1);
-        assert_eq!(c.get_denominator(), 6);
+        assert_eq!(c.get_numerator(), 1.0);
+        assert_eq!(c.get_denominator(), 6.0);
     }
     #[test]
     fn test_multiply() {
-        let a = Rational::new(1, 2);
-        let b = Rational::new(1, 3);
+        let a = Rational::new(1.0, 2.0);
+        let b = Rational::new(1.0, 3.0);
         let c = a.multiply(&b);
-        assert_eq!(c.get_numerator(), 1);
-        assert_eq!(c.get_denominator(), 6);
+        assert_eq!(c.get_numerator(), 1.0);
+        assert_eq!(c.get_denominator(), 6.0);
     }
     #[test]
     fn test_divide() {
-        let a = Rational::new(1, 2);
-        let b = Rational::new(1, 3);
+        let a = Rational::new(1.0, 2.0);
+        let b = Rational::new(1.0, 3.0);
         let c = a.divide(&b);
-        assert_eq!(c.get_numerator(), 3);
-        assert_eq!(c.get_denominator(), 2);
+        assert_eq!(c.get_numerator(), 3.0);
+        assert_eq!(c.get_denominator(), 2.0);
     }
     #[test]
     fn test_simplify() {
-        let a = Rational::new(2, 4);
+        let a = Rational::new(2.0, 4.0);
         let b = a.simplify();
-        assert_eq!(b.get_numerator(), 1);
-        assert_eq!(b.get_denominator(), 2);
+        assert_eq!(b.get_numerator(), 1.0);
+        assert_eq!(b.get_denominator(), 2.0);
     }
     #[test]
     fn test_to_float() {
-        let a = Rational::new(1, 2);
+        let a = Rational::new(1.0, 2.0);
         let b = a.to_float();
-        assert_eq!(b, 0.5);
+        assert_eq!(b, 0);
     }
     #[test]
     fn test_to_complex_float() {
-        let a = Rational::new(1, 2);
+        let a = Rational::new(1.0, 2.0);
         let b = a.to_complex_float();
         b.display();
         println!("{}, {}", b.get_real(), b.get_imag());
@@ -262,7 +263,7 @@ pub mod test_rational {
     }
     #[test]
     fn test_to_complex_int() {
-        let a = Rational::new(1, 2);
+        let a = Rational::new(1.0, 2.0);
         let b = a.to_complex_int();
         b.display();
         println!("{}, {}", b.get_real(), b.get_imag());
@@ -272,22 +273,22 @@ pub mod test_rational {
     }
     #[test]
     fn test_to_string() {
-        let a = Rational::new(1, 2);
+        let a = Rational::new(1.0, 2.0);
         let b = a.to_string();
         a.display();
         assert_eq!(b, "1/2");
     }
     #[test]
     fn test_to_string_complex() {
-        let a = Rational::new(1, 2);
+        let a = Rational::new(1.0, 2.0);
         let b = a.to_string_complex();
         a.display();
         assert_eq!(b, "1/2i");
     }
     #[test]
     fn test_new() {
-        let a = Rational::new(1, 2);
-        assert_eq!(a.get_numerator(), 1);
-        assert_eq!(a.get_denominator(), 2);
+        let a = Rational::new(1.0, 2.0);
+        assert_eq!(a.get_numerator(), 1.0);
+        assert_eq!(a.get_denominator(), 2.0);
     }
 }
