@@ -26,9 +26,9 @@ cargo add numbers_rus
 Add the following to your cargo.toml file:
 ```
 [dependencies]
-numbers_rus = "0.2.0"
+numbers_rus = "0.2.1"
 ```
-Current crates.io version: 0.2.0
+Current crates.io version: 0.2.1
 
 #### From Github:
 The source code for this library can be found on [Github](https://github.com/ooyeku/numbers_rus)
@@ -47,7 +47,7 @@ open the documentation:
 ``` bash
 cargo doc --open
 ```
-Current GitHub version: 0.2.0
+Current GitHub version: 0.2.1
 
 **Note:** The GitHub version may not be stable and will typically be ahead of the crates.io version.
 ## Examples:
@@ -67,11 +67,6 @@ The goal is to have a stable version by version 1.0.0.
 
 The following features are planned for this library:
 
-### Version 0.1.0
-- [x] Basic operations
-- [x] Add support for floating point numbers
-- [x] Add support for complex numbers
-- [x] Add support for vectors 
 ### Version 0.2.0
 - [ ] Add support for matrices
 - [ ] Add specialized data analysis functions

@@ -13,14 +13,13 @@ use crate::integers::complex_integers::Complex;
 /// let right = Complex::new(1, 1);
 /// let operation = '*';
 /// let equation = Equation::new(left, right, operation);
-/// assert_eq!(equation.left, Complex::new(1, 1));
-/// assert_eq!(equation.right, Complex::new(1, 1));
-/// assert_eq!(equation.sol, Complex::new(0, 2));
+/// println!("{:?}", equation);
 /// ```
+#[derive(Debug, Clone)]
 pub struct Equation {
-    pub left: Complex,
-    pub right: Complex,
-    pub operation: char,
+     left: Complex,
+     right: Complex,
+     operation: char,
     pub sol: Complex,
 }
 
@@ -51,6 +50,64 @@ impl Equation {
     /// Returns a reference to the right side of the equation
     pub fn get_right(&mut self) -> &Complex {
         &self.right
+    }
+    /// Returns a reference to the operation of the equation
+    pub fn get_operation(&mut self) -> &char {
+        &self.operation
+    }
+    /// Sets the operation of the equation and recalculates the solution
+    /// # Examples
+    /// ```
+    /// use numbers_rus::solve::complex_integer_equations::Equation;
+    /// use numbers_rus::integers::complex_integers::Complex;
+    /// let mut equation = Equation::new(Complex::new(1, 1), Complex::new(1, 1), '*');
+    /// equation.set_operation('+');
+    /// ```
+    pub fn set_operation(&mut self, operation: char) {
+        self.operation = operation;
+        self.sol = match operation {
+            '+' => self.left.add(&self.right),
+            '-' => self.left.subtract(&self.right),
+            '*' => self.left.multiply(&self.right),
+            '/' => self.left.divide(&self.right),
+            _ => panic!("Invalid operation"),
+        };
+    }
+    /// Sets the left side of the equation and recalculates the solution
+    /// # Examples
+    /// ```
+    /// use numbers_rus::solve::complex_integer_equations::Equation;
+    /// use numbers_rus::integers::complex_integers::Complex;
+    /// let mut equation = Equation::new(Complex::new(1, 1), Complex::new(1, 1), '*');
+    /// equation.set_left(Complex::new(2, 2));
+    /// ```
+    pub fn set_left(&mut self, left: Complex) {
+        self.left = left;
+        self.sol = match self.operation {
+            '+' => self.left.add(&self.right),
+            '-' => self.left.subtract(&self.right),
+            '*' => self.left.multiply(&self.right),
+            '/' => self.left.divide(&self.right),
+            _ => panic!("Invalid operation"),
+        };
+    }
+    /// Sets the right side of the equation and recalculates the solution
+    /// # Examples
+    /// ```
+    /// use numbers_rus::solve::complex_integer_equations::Equation;
+    /// use numbers_rus::integers::complex_integers::Complex;
+    /// let mut equation = Equation::new(Complex::new(1, 1), Complex::new(1, 1), '*');
+    /// equation.set_right(Complex::new(2, 2));
+    /// ```
+    pub fn set_right(&mut self, right: Complex) {
+        self.right = right;
+        self.sol = match self.operation {
+            '+' => self.left.add(&self.right),
+            '-' => self.left.subtract(&self.right),
+            '*' => self.left.multiply(&self.right),
+            '/' => self.left.divide(&self.right),
+            _ => panic!("Invalid operation"),
+        };
     }
 }
 #[cfg(test)]
@@ -150,5 +207,71 @@ mod test_equation {
         let operation = '/';
         let mut equation = Equation::new(left, right, operation);
         assert_eq!(equation.get_sol(), &Complex::new(1, 0));
+    }
+
+    #[test]
+    fn test_add_neg() {
+        let left = Complex::new(-1, -1);
+        let right = Complex::new(-1, -1);
+        let operation = '+';
+        let mut equation = Equation::new(left, right, operation);
+        assert_eq!(equation.get_sol(), &Complex::new(-2, -2));
+    }
+
+    #[test]
+    fn test_subtract_neg() {
+        let left = Complex::new(-1, -1);
+        let right = Complex::new(-1, -1);
+        let operation = '-';
+        let mut equation = Equation::new(left, right, operation);
+        assert_eq!(equation.get_sol(), &Complex::new(0, 0));
+    }
+
+    #[test]
+    fn test_multiply_neg() {
+        let left = Complex::new(-1, -1);
+        let right = Complex::new(-1, -1);
+        let operation = '*';
+        let mut equation = Equation::new(left, right, operation);
+        assert_eq!(equation.get_sol(), &Complex::new(0, 2));
+    }
+
+    #[test]
+    fn test_divide_neg() {
+        let left = Complex::new(-1, -1);
+        let right = Complex::new(-1, -1);
+        let operation = '/';
+        let mut equation = Equation::new(left, right, operation);
+        assert_eq!(equation.get_sol(), &Complex::new(1, 0));
+    }
+
+    #[test]
+    fn test_add_neg_pos() {
+        let left = Complex::new(-1, -1);
+        let right = Complex::new(1, 1);
+        let operation = '+';
+        let mut equation = Equation::new(left, right, operation);
+        assert_eq!(equation.get_sol(), &Complex::new(0, 0));
+    }
+
+    #[test]
+    fn test_subtract_neg_pos() {
+        let left = Complex::new(-1, -1);
+        let right = Complex::new(1, 1);
+        let operation = '-';
+        let mut equation = Equation::new(left, right, operation);
+        assert_eq!(equation.get_sol(), &Complex::new(-2, -2));
+    }
+
+    #[test]
+    fn test_set_operation() {
+        let left = Complex::new(-1, -1);
+        let right = Complex::new(1, 1);
+        let operation = '-';
+        let mut equation = Equation::new(left, right, operation);
+        // println!("{}", equation.get_sol());
+        equation.set_operation('+');
+        assert_eq!(equation.get_sol(), &Complex::new(0, 0));
+        // println!("{}", equation.get_sol());
     }
 }

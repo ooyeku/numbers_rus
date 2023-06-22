@@ -1,4 +1,14 @@
-//! solve module contains structures that hold both values and operations to be automatically solved.
+//! Solve module contains structures that hold both values and operations to be automatically solved.
+//! Module contains:
+//! * Base Equation struct
+//! * Equation struct for Complex floats
+//! * Equation struct for Complex integers
+//! * Equation struct for Rational floats
+//! * Equation struct for Rational integers
+//!
+//! Structures in the solve module are used to solve equations automatically.  The equation structs
+//! hold the left and right side of the equation, the operation, and the solution.  The solution is
+//! calculated during initialization.  The left and right side of the equation are immutable.
 //!
 //! # Examples
 //! ```

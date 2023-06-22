@@ -13,16 +13,14 @@ use crate::rational::rational_float::Rational;
 /// let left = Rational::new(1.0, 2.0);
 /// let right = Rational::new(1.0, 2.0);
 /// let operator = '+';
-/// let equation = RationalFloatEquation::new(left, right, operator);
-/// assert_eq!(equation.left, Rational::new(1.0, 2.0));
-/// assert_eq!(equation.right, Rational::new(1.0, 2.0));
-/// assert_eq!(equation.sol, Rational::new(4.0, 4.0)); // 1/2 + 1/2 = 4/4 = 2/2 = 1
+/// let mut equation = RationalFloatEquation::new(left, right, operator);
+/// println!("{:?}", equation);
 /// ```
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct RationalFloatEquation {
-    pub left: Rational,
-    pub right: Rational,
-    pub operator: char,
+     left: Rational,
+     right: Rational,
+     operator: char,
     pub sol: Rational,
 }
 
@@ -53,6 +51,74 @@ impl RationalFloatEquation {
     /// Returns a reference to the right side of the equation
     pub fn get_right(&mut self) -> &Rational {
         &self.right
+    }
+    /// Returns a reference to the operator of the equation
+    /// # Examples
+    /// ```
+    /// use numbers_rus::rational::rational_float::Rational;
+    /// use numbers_rus::solve::rational_float_equation::RationalFloatEquation;
+    ///
+    /// let left = Rational::new(1.0, 2.0);
+    /// let right = Rational::new(1.0, 2.0);
+    /// let operator = '+';
+    /// let mut equation = RationalFloatEquation::new(left, right, operator);
+    /// equation.set_left(Rational::new(1.0, 3.0));
+    pub fn set_left(&mut self, left: Rational) {
+        self.left = left;
+        // Recalculate solution
+        self.sol = match self.operator {
+            '+' => self.left.add(&self.right),
+            '-' => self.left.subtract(&self.right),
+            '*' => self.left.multiply(&self.right),
+            '/' => self.left.divide(&self.right),
+            _ => panic!("Invalid operation"),
+        };
+    }
+    /// Returns a reference to the operator of the equation
+    /// # Examples
+    /// ```
+    /// use numbers_rus::rational::rational_float::Rational;
+    /// use numbers_rus::solve::rational_float_equation::RationalFloatEquation;
+    ///
+    /// let left = Rational::new(1.0, 2.0);
+    /// let right = Rational::new(1.0, 2.0);
+    /// let operator = '+';
+    /// let mut equation = RationalFloatEquation::new(left, right, operator);
+    /// equation.set_right(Rational::new(1.0, 3.0));
+    /// ```
+    pub fn set_right(&mut self, right: Rational) {
+        self.right = right;
+        // Recalculate solution
+        self.sol = match self.operator {
+            '+' => self.left.add(&self.right),
+            '-' => self.left.subtract(&self.right),
+            '*' => self.left.multiply(&self.right),
+            '/' => self.left.divide(&self.right),
+            _ => panic!("Invalid operation"),
+        };
+    }
+    /// Returns a reference to the operator of the equation
+    /// # Examples
+    /// ```
+    /// use numbers_rus::rational::rational_float::Rational;
+    /// use numbers_rus::solve::rational_float_equation::RationalFloatEquation;
+    ///
+    /// let left = Rational::new(1.0, 2.0);
+    /// let right = Rational::new(1.0, 2.0);
+    /// let operator = '+';
+    /// let mut equation = RationalFloatEquation::new(left, right, operator);
+    /// equation.set_operator('-');
+    /// ```
+    pub fn set_operator(&mut self, operator: char) {
+        self.operator = operator;
+        // Recalculate solution
+        self.sol = match self.operator {
+            '+' => self.left.add(&self.right),
+            '-' => self.left.subtract(&self.right),
+            '*' => self.left.multiply(&self.right),
+            '/' => self.left.divide(&self.right),
+            _ => panic!("Invalid operation"),
+        };
     }
 }
 #[cfg(test)]
@@ -141,8 +207,11 @@ mod test_complex_rational_float_equation {
         let left = Rational::new(1.0, 2.0);
         let right = Rational::new(1.0, 2.0);
         let mut equation = RationalFloatEquation::new(left, right, '+');
-        equation.operator = '-';
+        // println!("{:?}", equation.get_sol()); // Rational { numerator: 4.0, denominator: 4.0 }
+        equation.set_operator('-');
         assert_eq!(equation.operator, '-');
+        // println!("{:?}", equation.get_sol()); // Rational { numerator: 0.0, denominator: 4.0 }
+        assert_eq!(equation.get_sol(), &Rational::new(0.0, 4.0));
     }
 
     #[test]
