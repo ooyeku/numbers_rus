@@ -174,8 +174,10 @@ impl Complex {
     /// assert_eq!(c.get_imag(), 0);
     /// ```
     pub fn divide(&self, other: &Self) -> Self {
-        let real = (self.real * other.real + self.imag * other.imag) / (other.real.pow(2) + other.imag.pow(2));
-        let imag = (self.imag * other.real - self.real * other.imag) / (other.real.pow(2) + other.imag.pow(2));
+        let real = (self.real * other.real + self.imag * other.imag)
+            / (other.real.pow(2) + other.imag.pow(2));
+        let imag = (self.imag * other.real - self.real * other.imag)
+            / (other.real.pow(2) + other.imag.pow(2));
         Self::new(real, imag)
     }
 

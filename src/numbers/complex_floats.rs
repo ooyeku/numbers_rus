@@ -5,7 +5,7 @@
 //!
 //! # Examples
 //! ```
-//! use numbers_rus::floats::complex_floats::Complex;
+//! use numbers_rus::numbers::complex_floats::Complex;
 //!
 //! let a = Complex::new(1.0, 2.0);
 //! let b = Complex::new(3.0, 4.0);
@@ -49,7 +49,10 @@ pub struct Complex {
 
 impl Default for Complex {
     fn default() -> Self {
-        Self { real: 0.0, imag: 0.0 }
+        Self {
+            real: 0.0,
+            imag: 0.0,
+        }
     }
 }
 
@@ -68,7 +71,7 @@ impl Complex {
         Self { real, imag }
     }
 
-    /// add - Adds two complex numbers (floats)
+    /// add - Adds two complex numbers (numbers)
     ///
     /// # Arguments
     ///
@@ -77,7 +80,7 @@ impl Complex {
     /// # Example
     ///
     /// ```
-    /// use numbers_rus::floats::complex_floats::Complex;
+    /// use numbers_rus::numbers::complex_floats::Complex;
     ///
     /// let a = Complex::new(1.0, 2.0);
     /// let b = Complex::new(3.0, 4.0);
@@ -91,7 +94,7 @@ impl Complex {
         Self::new(real, imag)
     }
 
-    /// subtract - subtracts two complex numbers (floats)
+    /// subtract - subtracts two complex numbers (numbers)
     ///
     /// # Arguments
     ///
@@ -100,7 +103,7 @@ impl Complex {
     /// # Example
     ///
     /// ```
-    /// use numbers_rus::floats::complex_floats::Complex;
+    /// use numbers_rus::numbers::complex_floats::Complex;
     ///
     /// let a = Complex::new(1.0, 2.0);
     /// let b = Complex::new(3.0, 4.0);
@@ -114,7 +117,7 @@ impl Complex {
         Self::new(real, imag)
     }
 
-    /// multiply - multiplies two complex numbers (floats)
+    /// multiply - multiplies two complex numbers (numbers)
     ///
     /// # Arguments
     ///
@@ -123,7 +126,7 @@ impl Complex {
     /// # Example
     ///
     /// ```
-    /// use numbers_rus::floats::complex_floats::Complex;
+    /// use numbers_rus::numbers::complex_floats::Complex;
     ///
     /// let a = Complex::new(1.0, 2.0);
     /// let b = Complex::new(3.0, 4.0);
@@ -137,12 +140,12 @@ impl Complex {
         Self::new(real, imag)
     }
 
-    /// divide - divides two complex numbers (floats)
+    /// divide - divides two complex numbers (numbers)
     ///
     /// # Example
     ///
     /// ```
-    /// use numbers_rus::floats::complex_floats::Complex;
+    /// use numbers_rus::numbers::complex_floats::Complex;
     ///
     /// let a = Complex::new(1.0, 2.0);
     /// let b = Complex::new(3.0, 4.0);
@@ -154,7 +157,7 @@ impl Complex {
         (self.real.powi(2) + self.imag.powi(2)).sqrt()
     }
 
-    /// divide - divides two complex numbers (floats)
+    /// divide - divides two complex numbers (numbers)
     ///
     /// # Arguments
     ///
@@ -163,7 +166,7 @@ impl Complex {
     /// # Example
     ///
     /// ```
-    /// use numbers_rus::floats::complex_floats::Complex;
+    /// use numbers_rus::numbers::complex_floats::Complex;
     ///
     /// let a = Complex::new(1.0, 2.0);
     /// let b = Complex::new(3.0, 4.0);
@@ -172,8 +175,10 @@ impl Complex {
     /// assert_eq!(c.get_imag(), 0.08);
     /// ```
     pub fn divide(&self, other: &Self) -> Self {
-        let real = (self.real * other.real + self.imag * other.imag) / (other.real.powi(2) + other.imag.powi(2));
-        let imag = (self.imag * other.real - self.real * other.imag) / (other.real.powi(2) + other.imag.powi(2));
+        let real = (self.real * other.real + self.imag * other.imag)
+            / (other.real.powi(2) + other.imag.powi(2));
+        let imag = (self.imag * other.real - self.real * other.imag)
+            / (other.real.powi(2) + other.imag.powi(2));
         Self::new(real, imag)
     }
 
@@ -182,7 +187,7 @@ impl Complex {
     /// # Example
     ///
     /// ```
-    /// use numbers_rus::floats::complex_floats::Complex;
+    /// use numbers_rus::numbers::complex_floats::Complex;
     ///
     /// let a = Complex::new(1.0, 2.0);
     /// let b = a.conjugate();
@@ -200,7 +205,7 @@ impl Complex {
     /// # Example
     ///
     /// ```
-    /// use numbers_rus::floats::complex_floats::Complex;
+    /// use numbers_rus::numbers::complex_floats::Complex;
     ///
     /// let a = Complex::new(1.0, 2.0);
     /// let b = a.inverse();

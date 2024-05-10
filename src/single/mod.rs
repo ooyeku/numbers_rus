@@ -6,4 +6,3 @@
 //! use numbers_rus::single::*;
 //! ```
 pub mod single_vector;
-mod single_matrix;

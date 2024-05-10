@@ -11,5 +11,5 @@
 //! assert_eq!(numerator, 1);
 //! assert_eq!(denominator, 2);
 //! ```
-pub mod rational_integer;
 pub mod rational_float;
+pub mod rational_integer;

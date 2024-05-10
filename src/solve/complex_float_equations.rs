@@ -1,14 +1,14 @@
 //! # Complex Float Equations Module
-use crate::floats::complex_floats::Complex;
+use crate::numbers::complex_floats::Complex;
 
-/// Equation struct for Complex floats.  Solves the equation during initialization, and stores the solution
-/// as a Complex float.  The left and right sides of the equation are stored as Complex floats and the operation
+/// Equation struct for Complex numbers.  Solves the equation during initialization, and stores the solution
+/// as a Complex float.  The left and right sides of the equation are stored as Complex numbers and the operation
 /// is stored as a char.
 ///
 /// # Examples
 /// ```
 /// use numbers_rus::solve::complex_float_equations::Equation;
-/// use numbers_rus::floats::complex_floats::Complex;
+/// use numbers_rus::numbers::complex_floats::Complex;
 ///
 /// let left = Complex::new(1.0, 1.0);
 /// let right = Complex::new(1.0, 1.0);
@@ -19,9 +19,9 @@ use crate::floats::complex_floats::Complex;
 ///
 #[derive(Debug, Clone, PartialEq)]
 pub struct Equation {
-     left: Complex,
-     right: Complex,
-     operation: char,
+    left: Complex,
+    right: Complex,
+    operation: char,
     pub sol: Complex,
 }
 
@@ -61,7 +61,7 @@ impl Equation {
     /// # Examples
     /// ```
     /// use numbers_rus::solve::complex_float_equations::Equation;
-    /// use numbers_rus::floats::complex_floats::Complex;
+    /// use numbers_rus::numbers::complex_floats::Complex;
     ///
     /// let left = Complex::new(1.0, 1.0);
     /// let right = Complex::new(1.0, 1.0);
@@ -85,7 +85,7 @@ impl Equation {
     /// # Examples
     /// ```
     /// use numbers_rus::solve::complex_float_equations::Equation;
-    /// use numbers_rus::floats::complex_floats::Complex;
+    /// use numbers_rus::numbers::complex_floats::Complex;
     ///
     /// let left = Complex::new(1.0, 1.0);
     /// let right = Complex::new(1.0, 1.0);
@@ -110,7 +110,7 @@ impl Equation {
     /// ```
     /// use std::ptr::eq;
     /// use numbers_rus::solve::complex_float_equations::Equation;
-    /// use numbers_rus::floats::complex_floats::Complex;
+    /// use numbers_rus::numbers::complex_floats::Complex;
     ///
     /// let left = Complex::new(1.0, 1.0);
     /// let right = Complex::new(1.0, 1.0);

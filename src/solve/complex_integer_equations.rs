@@ -17,9 +17,9 @@ use crate::integers::complex_integers::Complex;
 /// ```
 #[derive(Debug, Clone)]
 pub struct Equation {
-     left: Complex,
-     right: Complex,
-     operation: char,
+    left: Complex,
+    right: Complex,
+    operation: char,
     pub sol: Complex,
 }
 

@@ -3,11 +3,10 @@
 //! The dataframe structure is similar to pythons pandas dataframe but with less functionality and only for integers.
 //! The dataframe is stored as a vector of vectors.
 
+use std::collections::HashMap;
+
 /// A dataframe structure similar to pythons pandas dataframe but with less functionality and only for integers
-/// The structures is stored as a vector of vectors
-/// The first vector contains the column names
-/// The rest of the vectors contain the data
-/// The data is stored as a vector of vectors
+/// The structures is stored as a HashMap of vectors
 ///
 /// # Example
 /// ```
@@ -19,121 +18,53 @@
 /// ```
 ///
 pub struct DataFrame {
-        columns: Vec<String>,
-    data: Vec<Vec<i128>>,
+    data: HashMap<String, Vec<i128>>,
 }
+
 impl DataFrame {
-        /// Creates a new dataframe
+    /// Creates a new dataframe
     pub fn new() -> DataFrame {
-            DataFrame {
-                columns: Vec::new(),
-                data: Vec::new(),
-            }
+        DataFrame {
+            data: HashMap::new(),
         }
+    }
+
     /// Adds a column to the dataframe
     pub fn add_column(&mut self, name: &str, data: &Vec<i128>) {
-            self.columns.push(name.to_string());
-            self.data.push(data.clone());
-        }
+        self.data.insert(name.to_string(), data.clone());
+    }
+
     /// Returns the column names
-    pub fn get_columns(&self) -> Vec<String> {
-            self.columns.clone()
-        }
+    pub fn get_column_names(&self) -> Vec<String> {
+        self.data.keys().cloned().collect()
+    }
+
     /// Returns the data
-    pub fn get_data(&self) -> Vec<Vec<i128>> {
-            self.data.clone()
-        }
-    /// Returns the column names
+    pub fn get_data(&self) -> &HashMap<String, Vec<i128>> {
+        &self.data
+    }
+
+    /// Returns the data for a column
     pub fn get_column(&self, name: &str) -> Result<Vec<i128>, &'static str> {
-            let mut result = Vec::new();
+        if self.column_exists(name) {
+            Ok(self.data.get(name).unwrap().clone())
+        } else {
+            Err("Column not found")
+        }
+    }
 
-            for i in 0..self.columns.len() {
-                if self.columns[i] == name {
-                    result = self.data[i].clone();
-                }
-            }
-        if result.len() == 0 {
-            return Err("Column not found");
-        }
-        Ok(result)
-        }
-    /// Returns the column names
-    pub fn get_column_index(&self, name: &str) -> Result<i128, &'static str> {
-            let mut result = 0;
+    /// Returns the number of columns
+    pub fn get_column_count(&self) -> usize {
+        self.data.keys().len()
+    }
 
-            for i in 0..self.columns.len() {
-                if self.columns[i] == name {
-                    result = i;
-                }
-            }
-
-        if result == 0 {
-            return Err("Column not found");
-        }
-
-        Ok(result as i128)
-        }
-    /// Returns the column names
-    pub fn get_column_name(&self, index: i128) -> Result<String, &'static str> {
-            if index > self.columns.len() as i128 {
-                return Err("Column not found");
-            }
-
-        Ok(self.columns[index as usize].clone())
-        }
-    /// Returns the column names
-    pub fn get_column_count(&self) -> i128 {
-            self.columns.len() as i128
-        }
-    /// Returns the column names
+    /// Returns the number of rows
     pub fn get_row_count(&self) -> usize {
-            self.data[0].len()
-        }
+        self.data.values().next().map(|v| v.len()).unwrap_or(0)
     }
 
-/// Creates a new dataframe
-pub fn dataframe_create(
-    columns: Vec<String>,
-    data: Vec<Vec<i128>>,
-    ) -> Result<DataFrame, &'static str> {
-        if columns.len() != data.len() {
-            return Err("Column count does not match data count");
-        }
-
-    for i in 0..data.len() {
-        if data[i].len() != data[0].len() {
-            return Err("Data length does not match");
-        }
+    /// check if column exists
+    fn column_exists(&self, name: &str) -> bool {
+        self.data.contains_key(name)
     }
-
-    Ok(DataFrame {
-        columns,
-        data,
-    })
-    }
-#[cfg(test)]
-mod test_dataframe_create {
-        use super::*;
-
-        #[test]
-    fn it_works() {
-            let result = dataframe_create(
-                vec!["a".to_string(), "b".to_string(), "c".to_string()],
-            vec![vec![1, 2, 3], vec![1, 2, 3], vec![1, 2, 3]],
-        );
-
-            assert_eq!(result.is_ok(), true);
-        }
-    #[test]
-    fn display_dataframe() {
-            let result = dataframe_create(
-                vec!["a".to_string(), "b".to_string(), "c".to_string()],
-            vec![vec![1, 2, 3], vec![1, 2, 3], vec![1, 2, 3]],
-        );
-
-            assert_eq!(
-                result.unwrap().get_columns(),
-            vec!["a".to_string(), "b".to_string(), "c".to_string()]
-        );
-        }
-    }
+}

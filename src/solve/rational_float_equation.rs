@@ -1,8 +1,8 @@
 //! # Rational Float Equation Module
 use crate::rational::rational_float::Rational;
 
-/// Equation struct for Rational floats.  Solves the equation during initialization, and stores the solution
-/// as a Rational float.  The left and right sides of the equation are stored as Rational floats and the operation
+/// Equation struct for Rational numbers.  Solves the equation during initialization, and stores the solution
+/// as a Rational float.  The left and right sides of the equation are stored as Rational numbers and the operation
 /// is stored as a char.
 ///
 /// # Examples
@@ -18,9 +18,9 @@ use crate::rational::rational_float::Rational;
 /// ```
 #[derive(Debug, Clone, PartialEq)]
 pub struct RationalFloatEquation {
-     left: Rational,
-     right: Rational,
-     operator: char,
+    left: Rational,
+    right: Rational,
+    operator: char,
     pub sol: Rational,
 }
 
