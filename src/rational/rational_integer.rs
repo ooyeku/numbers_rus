@@ -8,8 +8,8 @@
 //! let a = Rational::new(1, 2);
 //! ```
 
-use crate::floats::complex_floats;
 use crate::integers::complex_integers;
+use crate::numbers::complex_floats;
 
 /// A rational number is a number that can be in the form p/q where p and q are integers and q is not equal to zero.
 ///
@@ -47,7 +47,10 @@ pub struct Rational {
 impl Rational {
     pub fn new(numerator: i32, denominator: i32) -> Self {
         assert_ne!(denominator, 0, "Denominator must not be zero!");
-        Self { numerator, denominator }
+        Self {
+            numerator,
+            denominator,
+        }
     }
 
     /// add two rational numbers
@@ -184,7 +187,7 @@ impl Rational {
         self.numerator as f64 / self.denominator as f64
     }
 
-    /// convert to complex number with real and imaginary parts as floats
+    /// convert to complex number with real and imaginary parts as numbers
     pub fn to_complex_float(&self) -> complex_floats::Complex {
         complex_floats::Complex::new(self.numerator as f64, self.denominator as f64)
     }

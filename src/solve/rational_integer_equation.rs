@@ -17,9 +17,9 @@ use crate::rational::rational_integer::Rational;
 /// ```
 #[derive(Debug, Clone)]
 pub struct RationalIntegerEquation {
-     left: Rational,
-     right: Rational,
-     operator: char,
+    left: Rational,
+    right: Rational,
+    operator: char,
     pub sol: Rational,
 }
 
@@ -220,7 +220,7 @@ mod test_complex_rational_integer_equation {
     fn test_subtract_neg() {
         let left = Rational::new(1, 2);
         let right = Rational::new(-1, 2);
-        let operator = '-';  // subtracting a negative is the same as adding a positive
+        let operator = '-'; // subtracting a negative is the same as adding a positive
         let mut equation = RationalIntegerEquation::new(left, right, operator);
         assert_eq!(equation.get_sol(), &Rational::new(4, 4));
     }
@@ -234,6 +234,6 @@ mod test_complex_rational_integer_equation {
         // println!("{:?}", equation.get_sol());
         equation.set_operator('-'); // operator changed to subtract
         assert_eq!(equation.get_sol(), &Rational::new(4, 4)); // solution doesn't change - should
-        // println!("{:?}", equation.get_sol());
+                                                              // println!("{:?}", equation.get_sol());
     }
 }
