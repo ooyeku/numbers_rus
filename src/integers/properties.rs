@@ -164,4 +164,61 @@ mod tests {
         assert!(is_perfect_number(496));
         assert!(!is_perfect_number(27));
     }
+
+    #[test]
+    fn squares_and_cubes_at_boundaries() {
+        // Largest perfect square fitting in u32 → still detected.
+        let big = (1u64 << 31) - 1;
+        assert!(!is_perfect_square(big));
+        assert!(is_perfect_square(big * big));
+        // Cubes at boundaries.
+        assert!(is_perfect_cube(0));
+        assert!(is_perfect_cube(1));
+        assert!(is_perfect_cube(-1));
+        assert!(is_perfect_cube(1_000_000)); // 100^3
+        assert!(is_perfect_cube(-1_000_000));
+    }
+
+    #[test]
+    fn perfect_power_does_not_lie_about_unit_cases() {
+        assert_eq!(perfect_power(1), None);
+        assert_eq!(perfect_power(2), None);
+        // Picks largest exponent: 729 = 27^2 = 9^3 = 3^6 → (3, 6).
+        assert_eq!(perfect_power(729), Some((3, 6)));
+    }
+
+    #[test]
+    fn divisors_of_unit_and_prime() {
+        assert_eq!(divisors(1), vec![1]);
+        assert_eq!(divisors(0), Vec::<u64>::new());
+        // Prime p: only 1 and p.
+        for &p in &[2u64, 13, 1009, 1_000_003] {
+            assert_eq!(divisors(p), vec![1, p]);
+            assert_eq!(divisor_count(p), 2);
+            assert_eq!(divisor_sum(p), 1 + p);
+        }
+    }
+
+    #[test]
+    fn divisors_are_sorted_and_complete() {
+        for n in 1..200u64 {
+            let d = divisors(n);
+            // Sorted, no dupes.
+            for window in d.windows(2) {
+                assert!(window[0] < window[1]);
+            }
+            // Cross-check by exhaustive trial.
+            let brute: Vec<u64> = (1..=n).filter(|k| n % k == 0).collect();
+            assert_eq!(d, brute, "n = {}", n);
+        }
+    }
+
+    #[test]
+    fn divisor_sum_minus_n_for_perfect() {
+        // The defining identity in another form.
+        for &p in &[6u64, 28, 496, 8128] {
+            let proper_sum: u64 = divisors(p).into_iter().filter(|&d| d != p).sum();
+            assert_eq!(proper_sum, p);
+        }
+    }
 }

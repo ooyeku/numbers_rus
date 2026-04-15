@@ -211,4 +211,58 @@ mod tests {
         let sol = e.solve();
         assert_eq!(format!("{} = {}", e, sol), "4 * 5 = 20");
     }
+
+    #[test]
+    fn every_setter_invalidates_cache() {
+        let mut e = Equation::new(10i64, 5, Op::Add);
+        assert_eq!(e.solve(), 15);
+
+        e.set_a(7);
+        assert_eq!(e.cached(), None);
+        assert_eq!(e.solve(), 12);
+
+        e.set_b(3);
+        assert_eq!(e.cached(), None);
+        assert_eq!(e.solve(), 10);
+
+        e.set_op(Op::Sub);
+        assert_eq!(e.cached(), None);
+        assert_eq!(e.solve(), 4);
+    }
+
+    #[test]
+    fn solve_is_idempotent() {
+        let mut e = Equation::new(7i64, 13, Op::Mul);
+        let first = e.solve();
+        let second = e.solve();
+        let third = e.solve();
+        assert_eq!(first, second);
+        assert_eq!(second, third);
+    }
+
+    #[test]
+    fn op_display_matches_symbol() {
+        for op in [Op::Add, Op::Sub, Op::Mul, Op::Div, Op::Rem] {
+            assert_eq!(format!("{}", op), op.symbol().to_string());
+        }
+    }
+
+    #[test]
+    fn op_enum_value_semantics() {
+        // PartialEq, Eq, Hash, Copy all work as expected.
+        use std::collections::HashSet;
+        let set: HashSet<Op> = [Op::Add, Op::Add, Op::Mul, Op::Sub, Op::Sub].into_iter().collect();
+        assert_eq!(set.len(), 3);
+        let copy = Op::Mul;
+        assert_eq!(copy, Op::Mul);
+    }
+
+    #[test]
+    fn accessor_methods() {
+        let e = Equation::new(8i64, 2, Op::Div);
+        assert_eq!(e.a(), 8);
+        assert_eq!(e.b(), 2);
+        assert_eq!(e.op(), Op::Div);
+        assert_eq!(e.cached(), None);
+    }
 }

@@ -30,7 +30,6 @@ serde = { version = "1", optional = true, features = ["derive"] }
 [dev-dependencies]
 rand = "0.10"
 proptest = "1"
-criterion = { version = "0.5", features = ["html_reports"] }
 
 [[example]]
 name = "solver"
@@ -39,10 +38,6 @@ path = "examples/solver.rs"
 [[example]]
 name = "primes_tour"
 path = "examples/primes_tour.rs"
-
-[[bench]]
-name = "primes"
-harness = false
 
 [package.metadata.docs.rs]
 all-features = true

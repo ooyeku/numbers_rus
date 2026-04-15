@@ -156,16 +156,6 @@ cargo run --example primes_tour --release
 cargo run --example solver --release
 ```
 
-## Benchmarks
-
-```bash
-cargo bench
-```
-
-Criterion output lands in `target/criterion/`. The benchmark suite exercises
-`is_prime`, `sieve`, and `prime_factorize` on inputs from ~10⁶ up to the
-Mersenne prime `2⁶¹ − 1`.
-
 ## Testing
 
 ```bash
@@ -225,8 +215,8 @@ Breaking additions wait for 2.0.
 ## Contributing
 
 Issues and pull requests welcome. Please keep changes focused — a new
-algorithm with a correctness test, a property test, and a benchmark carries
-a lot more weight than a formatting pass.
+algorithm with a correctness test and a property test carries a lot more
+weight than a formatting pass.
 
 ## License
 

@@ -197,4 +197,59 @@ mod tests {
         assert_eq!(range(&empty), None);
         assert_eq!(quartiles(&empty), None);
     }
+
+    #[test]
+    fn single_element_slice() {
+        let one = [42.0f64];
+        assert_eq!(mean(&one), Some(42.0));
+        assert_eq!(median(&one), Some(42.0));
+        assert_eq!(variance(&one), Some(0.0));
+        assert_eq!(std_dev(&one), Some(0.0));
+        assert_eq!(range(&one), Some(0.0));
+        let (q1, q2, q3) = quartiles(&one).unwrap();
+        assert_eq!((q1, q2, q3), (42.0, 42.0, 42.0));
+        assert_eq!(iqr(&one), Some(0.0));
+    }
+
+    #[test]
+    fn all_equal_slice_has_zero_dispersion() {
+        let xs = [7.0f64; 10];
+        assert_eq!(mean(&xs), Some(7.0));
+        assert_eq!(variance(&xs), Some(0.0));
+        assert_eq!(std_dev(&xs), Some(0.0));
+        assert_eq!(range(&xs), Some(0.0));
+        assert_eq!(iqr(&xs), Some(0.0));
+    }
+
+    #[test]
+    fn negative_inputs() {
+        let xs = [-3.0f64, -1.0, 0.0, 1.0, 3.0];
+        assert_eq!(mean(&xs), Some(0.0));
+        assert_eq!(median(&xs), Some(0.0));
+        assert_eq!(range(&xs), Some(6.0));
+    }
+
+    #[test]
+    fn mode_tie_breaking_picks_earliest() {
+        // Both 1 and 2 appear twice; the earliest first occurrence wins.
+        assert_eq!(mode(&[1i64, 2, 1, 2, 3]), Some(1));
+        assert_eq!(mode(&[2i64, 1, 1, 2, 3]), Some(2));
+    }
+
+    #[test]
+    fn variance_matches_definition() {
+        // var(x) = E[x²] - E[x]²
+        let xs = [1.0f64, 2.0, 3.0, 4.0, 5.0];
+        let m = mean(&xs).unwrap();
+        let manual = xs.iter().map(|x| (x - m).powi(2)).sum::<f64>() / xs.len() as f64;
+        assert!((variance(&xs).unwrap() - manual).abs() < 1e-12);
+    }
+
+    #[test]
+    fn integer_inputs_promote_to_f64() {
+        let xs = [1u32, 2, 3, 4, 5];
+        assert_eq!(mean(&xs), Some(3.0));
+        let xs = [10i128, 20, 30];
+        assert_eq!(mean(&xs), Some(20.0));
+    }
 }

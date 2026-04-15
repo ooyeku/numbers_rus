@@ -234,4 +234,65 @@ mod tests {
         assert_eq!(format!("{}", C::new(1.0, -2.0)), "1 - 2i");
         assert_eq!(format!("{}", C::new(1.0, 2.0)), "1 + 2i");
     }
+
+    #[test]
+    fn conj_involution() {
+        let z = C::new(2.5, -3.7);
+        assert_eq!(z.conj().conj(), z);
+        // z * conj(z) = |z|² (real, with zero imaginary).
+        let prod = z * z.conj();
+        assert!((prod.im).abs() < 1e-12);
+        assert!((prod.re - z.norm_sqr()).abs() < 1e-12);
+    }
+
+    #[test]
+    fn norm_is_multiplicative() {
+        // |z · w|² = |z|² · |w|²
+        let cases = [
+            (C::new(1.0, 2.0), C::new(3.0, 4.0)),
+            (C::new(-1.5, 0.5), C::new(2.0, -2.0)),
+            (C::new(0.0, 5.0), C::new(7.0, 0.0)),
+        ];
+        for (z, w) in cases {
+            let lhs = (z * w).norm_sqr();
+            let rhs = z.norm_sqr() * w.norm_sqr();
+            assert!((lhs - rhs).abs() < 1e-9);
+        }
+    }
+
+    #[test]
+    fn additive_and_multiplicative_identities() {
+        let z = C::new(1.7, -0.3);
+        assert_eq!(z + C::zero(), z);
+        assert_eq!(z * C::one(), z);
+        assert_eq!(z - z, C::zero());
+        assert_eq!(z * C::zero(), C::zero());
+    }
+
+    #[test]
+    fn negation_and_default() {
+        let z = C::new(3.0, -4.0);
+        assert_eq!(-z, C::new(-3.0, 4.0));
+        assert_eq!(-(-z), z);
+        assert_eq!(C::default(), C::zero());
+    }
+
+    #[test]
+    fn from_real_and_arg() {
+        let r = C::from(2.5);
+        assert_eq!(r, C::new(2.5, 0.0));
+        // arg(positive real) = 0; arg(i) = π/2.
+        assert!(C::new(1.0, 0.0).arg().abs() < 1e-12);
+        assert!((C::i().arg() - std::f64::consts::FRAC_PI_2).abs() < 1e-12);
+    }
+
+    #[test]
+    fn integer_complex_division_when_exact() {
+        // (4 + 0i) / (2 + 0i) = 2 + 0i.
+        let q: Complex<i64> = Complex::new(4, 0) / Complex::new(2, 0);
+        assert_eq!(q, Complex::new(2, 0));
+        // (5 + 5i) / (1 + 0i) = 5 + 5i.
+        let q: Complex<i64> = Complex::new(5, 5) / Complex::new(1, 0);
+        assert_eq!(q, Complex::new(5, 5));
+    }
 }

@@ -70,4 +70,51 @@ mod tests {
         assert_eq!(triangular(10), Some(55));
         assert_eq!(triangular(100), Some(5050));
     }
+
+    #[test]
+    fn factorial_recurrence() {
+        // n! = n · (n-1)!
+        for n in 1..=20u64 {
+            assert_eq!(
+                factorial(n).unwrap(),
+                (n as u128) * factorial(n - 1).unwrap()
+            );
+        }
+    }
+
+    #[test]
+    fn fibonacci_known_values() {
+        // F(20) = 6765, F(30) = 832_040, F(50) = 12_586_269_025.
+        assert_eq!(fibonacci(20), Some(6765));
+        assert_eq!(fibonacci(30), Some(832_040));
+        assert_eq!(fibonacci(50), Some(12_586_269_025));
+    }
+
+    #[test]
+    fn fibonacci_cassini_identity() {
+        // F(n-1) · F(n+1) − F(n)² = (−1)ⁿ
+        for n in 1..40u64 {
+            let fa = fibonacci(n - 1).unwrap() as i128;
+            let fb = fibonacci(n).unwrap() as i128;
+            let fc = fibonacci(n + 1).unwrap() as i128;
+            let lhs = fa * fc - fb * fb;
+            let expected = if n % 2 == 0 { 1 } else { -1 };
+            assert_eq!(lhs, expected, "n = {}", n);
+        }
+    }
+
+    #[test]
+    fn triangular_recurrence_and_overflow() {
+        // T(n) = T(n-1) + n.
+        for n in 1..1000u64 {
+            assert_eq!(
+                triangular(n).unwrap(),
+                triangular(n - 1).unwrap() + n as u128
+            );
+        }
+        // u128 overflow boundary: triangular(u64::MAX) overflows because
+        // u64::MAX + 1 would already wrap, but u128 has headroom for both.
+        // Check we at least don't panic on values that fit.
+        assert!(triangular(1_000_000).is_some());
+    }
 }

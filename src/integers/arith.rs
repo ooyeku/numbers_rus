@@ -225,4 +225,104 @@ mod tests {
             assert_eq!(euler_totient(p), p - 1);
         }
     }
+
+    #[test]
+    fn gcd_idempotent_and_symmetric() {
+        for n in 1..200u64 {
+            assert_eq!(gcd(n, n), n);
+            for m in 1..200u64 {
+                assert_eq!(gcd(n, m), gcd(m, n));
+            }
+        }
+    }
+
+    #[test]
+    fn lcm_overflow_detection() {
+        // Two distinct primes near sqrt(u64::MAX) — product just barely fits.
+        let p = 4_294_967_291u64;
+        let q = 4_294_967_279u64;
+        assert!(lcm(p, q).is_some());
+        // But scaling pushes it over.
+        assert!(lcm(p, q.saturating_mul(2)).is_none());
+    }
+
+    #[test]
+    fn extended_gcd_negatives_and_zero() {
+        let (g, x, y) = extended_gcd(-12, 18);
+        assert_eq!(g, 6);
+        assert_eq!(-12 * x + 18 * y, g);
+
+        let (g, x, _) = extended_gcd(7, 0);
+        assert_eq!((g, x), (7, 1));
+        let (g, _, y) = extended_gcd(0, 9);
+        assert_eq!((g, y), (9, 1));
+    }
+
+    #[test]
+    fn mod_pow_edges() {
+        // Anything mod 1 is 0.
+        assert_eq!(mod_pow(123, 456, 1), 0);
+        // 0^0 by convention is 1; 0^positive is 0.
+        assert_eq!(mod_pow(0, 0, 7), 1);
+        assert_eq!(mod_pow(0, 5, 7), 0);
+        // a^0 = 1.
+        assert_eq!(mod_pow(13, 0, 7), 1);
+        // a^1 = a mod m.
+        assert_eq!(mod_pow(13, 1, 7), 6);
+    }
+
+    #[test]
+    #[should_panic]
+    fn mod_pow_zero_modulus_panics() {
+        let _ = mod_pow(2, 3, 0);
+    }
+
+    #[test]
+    fn mod_inverse_roundtrip() {
+        for m in [11i64, 13, 17, 23, 101, 1_000_000_007] {
+            for a in 1..50i64 {
+                if let Some(inv) = mod_inverse(a, m) {
+                    assert_eq!((a * inv).rem_euclid(m), 1, "a={}, m={}", a, m);
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn crt_satisfies_each_congruence() {
+        let residues = [1i64, 2, 3, 4];
+        let moduli = [5i64, 7, 11, 13];
+        let (x, n) = chinese_remainder(&residues, &moduli).unwrap();
+        for (&r, &m) in residues.iter().zip(moduli.iter()) {
+            assert_eq!(x.rem_euclid(m), r);
+        }
+        // n should be the product (all coprime).
+        assert_eq!(n, 5 * 7 * 11 * 13);
+    }
+
+    #[test]
+    fn crt_single_element() {
+        assert_eq!(chinese_remainder(&[5], &[7]), Some((5, 7)));
+        // Out of canonical range: 17 mod 7 = 3.
+        assert_eq!(chinese_remainder(&[17], &[7]), Some((3, 7)));
+    }
+
+    #[test]
+    fn totient_powers_of_two() {
+        // φ(2^k) = 2^(k-1) for k >= 1.
+        for k in 1..20u32 {
+            let n = 1u64 << k;
+            assert_eq!(euler_totient(n), n / 2);
+        }
+    }
+
+    #[test]
+    fn totient_multiplicative_on_coprime() {
+        // φ(mn) = φ(m)φ(n) when gcd(m, n) = 1.
+        let pairs = [(3u64, 5), (7, 11), (4, 9), (8, 15), (13, 17)];
+        for (m, n) in pairs {
+            assert_eq!(gcd(m, n), 1);
+            assert_eq!(euler_totient(m * n), euler_totient(m) * euler_totient(n));
+        }
+    }
 }

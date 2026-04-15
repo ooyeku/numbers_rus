@@ -255,4 +255,81 @@ mod tests {
         assert_eq!(format!("{}", P::new(vec![0, 1])), "x");
         assert_eq!(format!("{}", P::new(vec![0, 0, 1])), "x^2");
     }
+
+    #[test]
+    fn multiplication_degree_additive() {
+        // For non-zero p, q: deg(p · q) = deg(p) + deg(q).
+        let pairs = [
+            (vec![1i64, 2], vec![3, 4, 5]),     // deg 1 · deg 2 = deg 3
+            (vec![-1i64, 0, 1], vec![1, 1]),    // deg 2 · deg 1 = deg 3
+            (vec![7i64], vec![1, 1, 1, 1, 1]),  // deg 0 · deg 4 = deg 4
+        ];
+        for (a, b) in pairs {
+            let p = P::new(a);
+            let q = P::new(b);
+            let expected = p.degree() + q.degree();
+            assert_eq!((p * q).degree(), expected);
+        }
+    }
+
+    #[test]
+    fn multiplication_with_zero() {
+        let p = P::new(vec![1i64, 2, 3]);
+        let zero = P::zero();
+        assert!((p.clone() * zero.clone()).is_zero());
+        assert!((zero * p).is_zero());
+    }
+
+    #[test]
+    fn addition_identity_and_self_subtraction() {
+        let p = P::new(vec![1i64, -2, 3, -4]);
+        assert_eq!(p.clone() + P::zero(), p);
+        assert!((p.clone() - p).is_zero());
+    }
+
+    #[test]
+    fn derivative_higher_order() {
+        // p(x) = x^4 → p'(x) = 4x^3 → p''(x) = 12x^2
+        let p = P::new(vec![0, 0, 0, 0, 1]);
+        let dp = p.derivative();
+        assert_eq!(dp.coefficients(), &[0, 0, 0, 4]);
+        let ddp = dp.derivative();
+        assert_eq!(ddp.coefficients(), &[0, 0, 12]);
+    }
+
+    #[test]
+    fn derivative_is_linear() {
+        // (p + q)' = p' + q' for several test pairs.
+        let pairs = [
+            (vec![1i64, 2, 3], vec![4, 5, 6]),
+            (vec![0, 0, 1], vec![1, 0, 0]),
+            (vec![-1i64, 1, -1, 1], vec![1, 1, 1]),
+        ];
+        for (a, b) in pairs {
+            let p = P::new(a);
+            let q = P::new(b);
+            let lhs = (p.clone() + q.clone()).derivative();
+            let rhs = p.derivative() + q.derivative();
+            assert_eq!(lhs, rhs);
+        }
+    }
+
+    #[test]
+    fn binomial_expansion() {
+        // (x + 1)^3 = x^3 + 3x^2 + 3x + 1
+        let x_plus_1 = P::new(vec![1i64, 1]);
+        let cubed = x_plus_1.clone() * x_plus_1.clone() * x_plus_1;
+        assert_eq!(cubed.coefficients(), &[1, 3, 3, 1]);
+    }
+
+    #[test]
+    fn eval_known_polynomial_values() {
+        // p(x) = x^4 - 10x^3 + 35x^2 - 50x + 24 = (x-1)(x-2)(x-3)(x-4)
+        let p = P::new(vec![24i64, -50, 35, -10, 1]);
+        for root in 1..=4i64 {
+            assert_eq!(p.eval(root), 0);
+        }
+        assert_eq!(p.eval(0), 24);
+        assert_eq!(p.eval(5), 24);
+    }
 }

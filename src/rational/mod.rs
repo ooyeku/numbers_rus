@@ -316,4 +316,66 @@ mod tests {
     fn divide_by_zero_panics() {
         let _ = R::new(1, 2) / R::zero();
     }
+
+    #[test]
+    fn hash_equality_after_reduction() {
+        use std::collections::hash_map::DefaultHasher;
+        use std::hash::{Hash, Hasher};
+        fn h(r: R) -> u64 {
+            let mut s = DefaultHasher::new();
+            r.hash(&mut s);
+            s.finish()
+        }
+        assert_eq!(h(R::new(2, 4)), h(R::new(1, 2)));
+        assert_eq!(h(R::new(-3, 6)), h(R::new(-1, 2)));
+        assert_eq!(h(R::new(0, 5)), h(R::zero()));
+    }
+
+    #[test]
+    fn ordering_with_mixed_signs() {
+        assert!(R::new(-3, 5) < R::new(-1, 5));
+        assert!(R::new(-1, 1000) < R::zero());
+        assert!(R::zero() < R::new(1, 1_000_000));
+        // Sorting a small set.
+        let mut xs = vec![R::new(1, 2), R::new(-1, 3), R::new(2, 5), R::zero(), R::new(-2, 7)];
+        xs.sort();
+        assert_eq!(
+            xs,
+            vec![R::new(-1, 3), R::new(-2, 7), R::zero(), R::new(2, 5), R::new(1, 2)]
+        );
+    }
+
+    #[test]
+    fn from_integer_and_default() {
+        assert_eq!(R::from(7), R::from_integer(7));
+        assert_eq!(R::default(), R::zero());
+        assert_eq!(R::one(), R::new(1, 1));
+        assert!(R::from_integer(42).is_integer());
+    }
+
+    #[test]
+    fn arithmetic_identities() {
+        let r = R::new(3, 7);
+        assert_eq!(r + R::zero(), r);
+        assert_eq!(r * R::one(), r);
+        assert_eq!(r - r, R::zero());
+        // a / b == a * b.recip()
+        let s = R::new(5, 11);
+        assert_eq!(r / s, r * s.recip());
+        // Multiplication by zero.
+        assert_eq!(r * R::zero(), R::zero());
+    }
+
+    #[test]
+    fn pow_negative_base() {
+        let r = R::new(-2, 3);
+        assert_eq!(r.pow(2), Some(R::new(4, 9)));
+        assert_eq!(r.pow(3), Some(R::new(-8, 27)));
+    }
+
+    #[test]
+    #[should_panic(expected = "cannot invert zero")]
+    fn recip_zero_panics() {
+        let _ = R::zero().recip();
+    }
 }

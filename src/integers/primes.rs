@@ -253,4 +253,73 @@ mod tests {
             assert_eq!(product, n);
         }
     }
+
+    #[test]
+    fn primality_at_u64_boundaries() {
+        // The largest prime that fits in u64.
+        assert!(is_prime(18_446_744_073_709_551_557));
+        // u64::MAX is 2^64 - 1 = 3 · 5 · 17 · 257 · 641 · 65537 · 6700417.
+        assert!(!is_prime(u64::MAX));
+        // 2^32 + 1 (Fermat number F5) = 641 · 6700417, composite.
+        assert!(!is_prime(4_294_967_297));
+    }
+
+    #[test]
+    fn sieve_edge_cases() {
+        assert_eq!(sieve(0), Vec::<u64>::new());
+        assert_eq!(sieve(1), Vec::<u64>::new());
+        assert_eq!(sieve(2), vec![2]);
+        assert_eq!(sieve(3), vec![2, 3]);
+        // Correct count: π(100) = 25.
+        assert_eq!(sieve(100).len(), 25);
+        // π(1000) = 168.
+        assert_eq!(sieve(1000).len(), 168);
+    }
+
+    #[test]
+    fn next_prime_skips_composites() {
+        assert_eq!(next_prime(13), 17);
+        assert_eq!(next_prime(23), 29);
+        // Largest 32-bit prime: next prime after 4_294_967_290 should be 4_294_967_291.
+        assert_eq!(next_prime(4_294_967_290), 4_294_967_291);
+    }
+
+    #[test]
+    fn nth_prime_progression() {
+        // Verify monotonicity over a small range.
+        let primes_small: Vec<u64> = (1..=200).map(nth_prime).collect();
+        for window in primes_small.windows(2) {
+            assert!(window[0] < window[1]);
+            assert!(is_prime(window[1]));
+        }
+    }
+
+    #[test]
+    #[should_panic]
+    fn nth_prime_zero_panics() {
+        let _ = nth_prime(0);
+    }
+
+    #[test]
+    fn factorize_prime_powers() {
+        // Pure prime powers should produce a single entry.
+        assert_eq!(prime_factorize(1u64 << 32), vec![(2, 32)]);
+        assert_eq!(prime_factorize(3u64.pow(20)), vec![(3, 20)]);
+        assert_eq!(prime_factorize(7u64.pow(10)), vec![(7, 10)]);
+    }
+
+    #[test]
+    fn factorize_factors_are_prime_and_sorted() {
+        for n in 2..2000u64 {
+            let factors = prime_factorize(n);
+            for &(p, e) in &factors {
+                assert!(is_prime(p), "factor {} of {} is not prime", p, n);
+                assert!(e >= 1);
+            }
+            // Strictly ascending.
+            for window in factors.windows(2) {
+                assert!(window[0].0 < window[1].0, "n = {}", n);
+            }
+        }
+    }
 }
