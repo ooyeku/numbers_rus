@@ -10,7 +10,7 @@ edition = "2021"
 rust-version = "1.70"
 description = "Number-theory primitives and exact arithmetic for Rust — built for competitive programming, teaching, and recreational math. Miller-Rabin primality, sieves, factorization, modular arithmetic, generic rationals, complex numbers, and polynomials."
 license = "MIT OR Apache-2.0"
-keywords = ["number-theory", "primes", "rational", "polynomial", "competitive-programming"]
+keywords = ["number-theory", "primes", "rational", "polynomial", "cryptography"]
 categories = ["mathematics", "science", "algorithms"]
 
 [lib]
