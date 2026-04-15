@@ -1,18 +1,49 @@
 [package]
 name = "numbers_rus"
-version = "0.2.1"
+version = "1.0.0"
 authors = ["Ola Yeku <yekuola@gmail.com>"]
-repository = "https://github.com/ooyeku/numbers_rus.git"
+repository = "https://github.com/ooyeku/numbers_rus"
+homepage = "https://github.com/ooyeku/numbers_rus"
+documentation = "https://docs.rs/numbers_rus"
+readme = "README.md"
 edition = "2021"
-description = "A flexible library for working with numbers that aims to be useful, fast, and practical.   Modular structure makes it easy to use only the parts you need, and the library is designed to be extensible, so you can easily add your own types and operations."
+rust-version = "1.70"
+description = "Number-theory primitives and exact arithmetic for Rust — built for competitive programming, teaching, and recreational math. Miller-Rabin primality, sieves, factorization, modular arithmetic, generic rationals, complex numbers, and polynomials."
 license = "MIT OR Apache-2.0"
+keywords = ["number-theory", "primes", "rational", "polynomial", "competitive-programming"]
+categories = ["mathematics", "science", "algorithms"]
 
 [lib]
 name = "numbers_rus"
 path = "src/lib.rs"
 
+[features]
+default = ["std"]
+std = []
+serde = ["dep:serde"]
 
 [dependencies]
-ordered-float = "4.2.0"
-itertools = "0.12.0"
-rand = "0.8.4"
+num-traits = { version = "0.2", default-features = false, features = ["std"] }
+num-integer = { version = "0.1", default-features = false, features = ["std"] }
+serde = { version = "1", optional = true, features = ["derive"] }
+
+[dev-dependencies]
+rand = "0.10"
+proptest = "1"
+criterion = { version = "0.5", features = ["html_reports"] }
+
+[[example]]
+name = "solver"
+path = "examples/solver.rs"
+
+[[example]]
+name = "primes_tour"
+path = "examples/primes_tour.rs"
+
+[[bench]]
+name = "primes"
+harness = false
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]

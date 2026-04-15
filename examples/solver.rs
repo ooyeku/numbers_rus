@@ -1,68 +1,71 @@
-/// To run this example, use `cargo run --example solver`
-use numbers_rus::solve::equation::*;
-use rand::Rng;
-use std::thread::sleep;
+//! Random-equation demo.
+//!
+//! Generates random integer equations, solves them, and annotates each result
+//! with its primality, parity, and (for composites) prime factorization.
+//!
+//! Run with: `cargo run --example solver --release`.
+
+use numbers_rus::equation::{Equation, Op};
+use numbers_rus::integers::{primes, properties};
+use rand::RngExt;
+use std::io::{self, Write};
+
 fn main() {
     println!();
-    println!();
-    println!("Demonstrating the Equation struct from the numbers_rus::solve module.");
-    sleep(std::time::Duration::from_secs(1));
-    println!(
-        "The Example below creates an equation with two random numbers between 1 and 1,000,000 and"
-    );
-    sleep(std::time::Duration::from_secs(1));
-    println!("then prints the equation and the solution.  It then checks to see if the solution is prime");
-    sleep(std::time::Duration::from_secs(1));
-    println!(
-        "and if it is odd.  It then changes the operator to subtraction and repeats the process."
-    );
-    sleep(std::time::Duration::from_secs(1));
-    println!();
-    let mut reps = 0;
-    assert_eq!(reps, 0);
-    let mut rng = rand::thread_rng();
-    loop {
-        println!("How many reps would you like to run? (Please enter a number greater than 0)");
-        println!("Leave blank and press enter to exit.");
-        println!("Enter reps: ");
-        let mut reps_str = String::new();
-        std::io::stdin()
-            .read_line(&mut reps_str)
-            .expect("Failed to read line");
-        // check for exit
-        if reps_str.trim() == "" {
-            println!("Exiting...");
-            std::process::exit(0);
-        }
-        reps = reps_str.trim().parse().expect("Please type a number!");
-        if reps > 0 {
-            break;
-        }
-    }
+    println!("numbers_rus :: solver demo");
+    println!("==========================");
+    println!("Generates random integer equations, prints each solution, and");
+    println!("annotates it with primality, parity, and factorization.\n");
+
+    let reps = prompt_reps();
+    let mut rng = rand::rng();
+    let ops = [Op::Add, Op::Sub, Op::Mul];
+
     let start = std::time::Instant::now();
     for _ in 0..reps {
-        let a = rng.gen_range(1..=1_000_000);
-        println!("a = {}", a);
-        let b = rng.gen_range(1..=1_000_000);
-        println!("b = {}", b);
-        // generate random operator
-        let operators = ['+', '-', '*', '/'];
-        let operator = operators[rng.gen_range(0..operators.len())];
-        println!("operator = {}", operator);
-        let mut c = Equation::new(a, b, operator);
-        println!("{} {} {} = {}", a, operator, b, c.get_sol());
-        if numbers_rus::integers::base::is_prime(c.get_sol()) {
-            println!("{} is prime", c.get_sol());
-        } else {
-            println!("{} is not prime", c.get_sol());
+        let a: i64 = rng.random_range(1..=1_000_000);
+        let b: i64 = rng.random_range(1..=1_000_000);
+        let op = ops[rng.random_range(0..ops.len())];
+
+        let mut eq = Equation::new(a, b, op);
+        let sol = eq.solve();
+
+        println!("{} = {}", eq, sol);
+
+        if sol > 1 {
+            let n = sol as u64;
+            if primes::is_prime(n) {
+                println!("  → prime");
+            } else {
+                let factors = primes::prime_factorize(n);
+                let rendered: Vec<String> = factors
+                    .iter()
+                    .map(|&(p, e)| if e == 1 { p.to_string() } else { format!("{}^{}", p, e) })
+                    .collect();
+                println!("  → composite: {}", rendered.join(" · "));
+            }
         }
-        if numbers_rus::integers::base::is_odd(c.get_sol()) {
-            println!("{} is odd", c.get_sol());
-        } else {
-            println!("{} is even", c.get_sol());
+
+        println!(
+            "  → parity: {}",
+            if properties::is_even(sol) { "even" } else { "odd" }
+        );
+    }
+    println!("\nTotal time for {} reps: {:?}", reps, start.elapsed());
+}
+
+fn prompt_reps() -> u32 {
+    loop {
+        print!("How many reps? (blank to exit) › ");
+        io::stdout().flush().ok();
+        let mut s = String::new();
+        io::stdin().read_line(&mut s).expect("stdin read failed");
+        if s.trim().is_empty() {
+            std::process::exit(0);
+        }
+        match s.trim().parse::<u32>() {
+            Ok(n) if n > 0 => return n,
+            _ => println!("Please enter a positive integer."),
         }
     }
-    // end timer
-    let duration = start.elapsed();
-    println!("Time to run {} reps: {:?}", reps, duration);
 }
